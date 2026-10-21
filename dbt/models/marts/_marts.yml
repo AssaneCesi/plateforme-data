@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: mart_unites_legales
+    description: >
+      Unités légales prêtes à l'usage. nom_affiche est NULL pour les entrepreneurs
+      individuels en diffusion partielle (règle R19, bloquante).
+    columns:
+      - name: siren
+        data_tests: [not_null, unique]
+  - name: mart_etablissements
+    description: Établissements enrichis de la commune et de la catégorie juridique.
+    columns:
+      - name: siret
+        data_tests: [not_null, unique]

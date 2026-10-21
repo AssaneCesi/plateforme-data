@@ -1,0 +1,30 @@
+# Catalogue des règles de qualité : source unique de vérité.
+# docs/catalogue-regles.md est généré à partir de ce fichier (python pipeline.py catalogue).
+#
+# seuil       : taux d'échec toléré (0 = aucun échec accepté, 0.01 = 1 %).
+#               Pour R01 et R03, les lignes fautives partent en quarantaine ; au-delà de
+#               0,1 % le fichier entier est jugé suspect et le run est bloqué.
+# criticite   : bloquante (poids 3), majeure (2), mineure (1) dans le score
+# statut      : implementee | a_faire
+
+regles:
+  - {id: R01, libelle: SIRET renseigné, dimension: Complétude, criticite: bloquante, seuil: 0.001, outil: "GX, à l'entrée", objet: raw.etablissements, statut: implementee}
+  - {id: R02, libelle: SIRET unique dans le chargement, dimension: Unicité, criticite: majeure, seuil: 0, outil: "GX, à l'entrée ; règle de survie en staging", objet: raw.etablissements, statut: implementee}
+  - {id: R03, libelle: SIRET composé de 14 chiffres, dimension: Validité, criticite: bloquante, seuil: 0.001, outil: "GX, à l'entrée ; lignes en quarantaine", objet: raw.etablissements, statut: implementee}
+  - {id: R04, libelle: "Clé de contrôle du SIRET (Luhn, exception La Poste)", dimension: Validité, criticite: majeure, seuil: 0, outil: dbt test personnalisé, objet: stg_etablissements, statut: implementee}
+  - {id: R05, libelle: Le SIREN de l'établissement existe dans les unités légales, dimension: Intégrité, criticite: majeure, seuil: 0, outil: dbt relationships, objet: stg_etablissements, statut: implementee}
+  - {id: R06, libelle: Code commune présent dans le référentiel géographique, dimension: Validité, criticite: majeure, seuil: 0, outil: dbt relationships, objet: stg_etablissements, statut: implementee}
+  - {id: R07, libelle: Code APE au format NAF (99.99X), dimension: Validité, criticite: majeure, seuil: 0, outil: dbt test personnalisé, objet: stg_etablissements, statut: implementee}
+  - {id: R08, libelle: Code postal à 5 chiffres, dimension: Validité, criticite: mineure, seuil: 0.01, outil: "GX, seuil 99 %", objet: raw.etablissements, statut: implementee}
+  - {id: R09, libelle: État administratif A ou F, dimension: Validité, criticite: majeure, seuil: 0, outil: dbt test personnalisé, objet: stg_etablissements, statut: implementee}
+  - {id: R10, libelle: Date de création non future, dimension: Cohérence, criticite: majeure, seuil: 0, outil: dbt test personnalisé, objet: stg_etablissements, statut: implementee}
+  - {id: R11, libelle: Établissement fermé avec une date de début de période renseignée, dimension: Cohérence, criticite: mineure, seuil: 0, outil: dbt, objet: stg_etablissements, statut: a_faire, exercice: S4}
+  - {id: R12, libelle: Un seul siège actif par unité légale active, dimension: Cohérence, criticite: mineure, seuil: 0.005, outil: "dbt test singulier (à valider avec le métier)", objet: stg_unites_legales, statut: implementee}
+  - {id: R13, libelle: Dénomination renseignée pour les personnes morales, dimension: Complétude, criticite: majeure, seuil: 0, outil: dbt not_null conditionnel, objet: stg_unites_legales, statut: implementee}
+  - {id: R14, libelle: Adresse complète pour les établissements actifs, dimension: Complétude, criticite: mineure, seuil: 0.02, outil: dbt, objet: stg_etablissements, statut: a_faire, exercice: S1}
+  - {id: R15, libelle: "Doublons potentiels (nom normalisé et code postal)", dimension: Unicité, criticite: mineure, seuil: 0, outil: SQL, objet: stg_unites_legales, statut: a_faire, exercice: M1}
+  - {id: R16, libelle: Dénomination identique entre SIRENE et l'API Recherche d'entreprises, dimension: Exactitude, criticite: mineure, seuil: 0.01, outil: "Python + dbt", objet: stg_unites_legales, statut: a_faire, exercice: "phase 2"}
+  - {id: R17, libelle: Volume du chargement dans ±3 écarts-types des 7 précédents, dimension: Fraîcheur et volume, criticite: majeure, seuil: 0, outil: "SQL, orchestrateur", objet: raw.etablissements, statut: a_faire, exercice: S9}
+  - {id: R18, libelle: Dernier chargement plus récent que le seuil du contrat, dimension: Fraîcheur, criticite: bloquante, seuil: 0, outil: dbt source freshness, objet: raw.etablissements, statut: implementee, exercice: D3}
+  - {id: R19, libelle: "Diffusion partielle respectée : aucune donnée nominative exposée", dimension: Conformité, criticite: bloquante, seuil: 0, outil: "dbt test singulier, bloquant", objet: mart_unites_legales, statut: implementee}
+  - {id: R20, libelle: Aucune unité repassée de cessée à active sans explication, dimension: Cohérence, criticite: mineure, seuil: 0, outil: dbt snapshot, objet: stg_unites_legales, statut: a_faire, exercice: D4}

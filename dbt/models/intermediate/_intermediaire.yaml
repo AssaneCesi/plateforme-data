@@ -1,0 +1,9 @@
+version: 2
+
+models:
+  - name: etablissements_courant
+    description: >
+      Maintiens une table etablissements_courant à partir du dernier lot : insérer les nouveaux SIRET, mettre à jour ceux dont la date de dernier traitement est plus récente, ne rien toucher sinon. Rejouer le même lot ne doit rien changer. 
+    columns:
+      - name: siret
+        data_tests: [not_null, unique]

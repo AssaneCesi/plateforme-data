@@ -1,0 +1,30 @@
+id: sirene-unites-legales
+version: 1.0.0
+statut: actif
+producteur: Insee, fichier stock StockUniteLegale (data.gouv.fr)
+proprietaire: "[à définir : rôle responsable du référentiel entreprises]"
+consommateurs: [stg_unites_legales, mart_unites_legales, scorecard]
+
+niveau_de_service:
+  frequence: mensuelle, fichier publié à partir du 1er du mois
+  fraicheur_max_jours: 40
+
+colonnes:
+  - {source: siren, cible: siren, requise: true}
+  - {source: statutDiffusionUniteLegale, cible: statut_diffusion, requise: true, description: "O diffusible, P diffusion partielle"}
+  - {source: dateCreationUniteLegale, cible: date_creation, requise: true}
+  - {source: dateDernierTraitementUniteLegale, cible: date_dernier_traitement, requise: true}
+  - {source: etatAdministratifUniteLegale, cible: etat_administratif, requise: true, description: "A active, C cessée"}
+  - {source: denominationUniteLegale, cible: denomination, requise: true, description: "Raison sociale des personnes morales"}
+  - {source: nomUniteLegale, cible: nom, requise: true, description: "Nom de naissance (personnes physiques) : donnée personnelle"}
+  - {source: prenom1UniteLegale, cible: prenom1, requise: false, description: "Donnée personnelle"}
+  - {source: categorieJuridiqueUniteLegale, cible: categorie_juridique, requise: true, description: "1000 = entrepreneur individuel"}
+  - {source: activitePrincipaleUniteLegale, cible: activite_principale, requise: true}
+  - {source: nicSiegeUniteLegale, cible: nic_siege, requise: true}
+  - {source: dateDebut, cible: date_debut, requise: false}
+
+changements:
+  preavis: "Toute suppression ou tout renommage de colonne requise casse l'ingestion : le producteur prévient au moins 30 jours avant."
+  historique:
+    - version: 1.0.0
+      note: Version initiale.

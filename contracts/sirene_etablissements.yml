@@ -1,0 +1,40 @@
+# Data contract de la source « établissements » (fichier stock SIRENE).
+# Il pilote réellement l'ingestion : le chargement lit ce fichier pour savoir quelles
+# colonnes prendre, comment les renommer, et il s'arrête si une colonne requise manque.
+id: sirene-etablissements
+version: 1.1.0
+statut: actif
+producteur: Insee, fichier stock StockEtablissement (data.gouv.fr)
+proprietaire: "[à définir : rôle responsable du référentiel entreprises]"
+consommateurs: [stg_etablissements, mart_etablissements, scorecard]
+
+niveau_de_service:
+  frequence: mensuelle, fichier publié à partir du 1er du mois
+  fraicheur_max_jours: 40
+
+colonnes:
+  - {source: siret, cible: siret, requise: true, description: "Identifiant de l'établissement (SIREN + NIC)"}
+  - {source: siren, cible: siren, requise: true, description: "Identifiant de l'unité légale"}
+  - {source: nic, cible: nic, requise: false, description: "Numéro interne de classement"}
+  - {source: statutDiffusionEtablissement, cible: statut_diffusion, requise: true, description: "O diffusible, P diffusion partielle"}
+  - {source: dateCreationEtablissement, cible: date_creation, requise: true}
+  - {source: dateDernierTraitementEtablissement, cible: date_dernier_traitement, requise: true}
+  - {source: etablissementSiege, cible: etablissement_siege, requise: true}
+  - {source: codePostalEtablissement, cible: code_postal, requise: true}
+  - {source: libelleCommuneEtablissement, cible: libelle_commune, requise: false}
+  - {source: codeCommuneEtablissement, cible: code_commune, requise: true}
+  - {source: dateDebut, cible: date_debut, requise: false, description: "Début de la période en cours"}
+  - {source: etatAdministratifEtablissement, cible: etat_administratif, requise: true, description: "A actif, F fermé"}
+  - {source: activitePrincipaleEtablissement, cible: activite_principale, requise: true, description: "Code APE (NAF rév. 2)"}
+  - {source: activitePrincipaleNAF25Etablissement, cible: activite_principale_naf25, requise: false, description: "Code NAF 2025, informatif"}
+
+changements:
+  preavis: "Toute suppression ou tout renommage de colonne requise casse l'ingestion : le producteur prévient au moins 30 jours avant."
+  historique:
+    - version: 1.0.0
+      note: Version initiale.
+    - version: 1.1.0
+      note: >
+        Ajout par l'Insee (décembre 2025) de activitePrincipaleNAF25Etablissement, à titre
+        informatif. Colonne déclarée optionnelle : l'Insee a annoncé sa disparition lors de la
+        bascule en NAF 2025 début janvier 2027.

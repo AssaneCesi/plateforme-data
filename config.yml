@@ -1,0 +1,26 @@
+# Configuration du pipeline. Les chemins relatifs partent de la racine du dépôt.
+
+# echantillon : données synthétiques générées localement (aucun téléchargement)
+# reel        : fichiers stock SIRENE téléchargés avec `python pipeline.py telecharger`
+source: echantillon
+
+# Périmètre géographique chargé depuis les fichiers réels (codes département).
+departements: ["75", "92"]
+
+chemins:
+  entrepot: data/entrepot.duckdb
+  echantillon: data/echantillon
+  sirene: data/sirene
+  referentiels: data/referentiels
+  api: data/api
+  exports: exports
+
+sirene:
+  # URL stables de la page data.gouv.fr « Base Sirene des entreprises et de leurs
+  # établissements (SIREN, SIRET) », format parquet. Si le téléchargement échoue
+  # ou si le contrôle de schéma signale une inversion, recopie les liens depuis la page.
+  unites_legales_parquet: https://www.data.gouv.fr/api/1/datasets/r/350182c9-148a-46e0-8389-76c2ec1374a3
+  etablissements_parquet: https://www.data.gouv.fr/api/1/datasets/r/a29c1297-1f92-4e2a-8f6b-8c902ce96c5f
+
+geo_api: https://geo.api.gouv.fr
+api_recherche: https://recherche-entreprises.api.gouv.fr

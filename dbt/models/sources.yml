@@ -1,0 +1,26 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: raw
+    description: >
+      Couche brute : fichiers chargés tels que reçus, toutes les colonnes en texte,
+      une ligne par enregistrement et par date de chargement.
+    tables:
+      - name: etablissements
+        description: Établissements SIRENE (contrat contracts/sirene_etablissements.yml)
+        columuns: 
+          - name: date_chargement
+            config:
+              loaded_at_field: date_chargement
+              freshness:
+                warn_after:
+                  count: 2
+                  period: month
+                error_after:
+                  count: 3
+                  period: month  
+      - name: unites_legales
+        description: Unités légales SIRENE (contrat contracts/sirene_unites_legales.yml)
+      - name: communes
+        description: Référentiel géographique (communes et arrondissements municipaux)

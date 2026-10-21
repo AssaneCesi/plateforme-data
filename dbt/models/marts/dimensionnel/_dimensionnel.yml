@@ -1,0 +1,46 @@
+version: 2
+
+models:
+  - name: fct_creations_entreprises
+    description: Une ligne par unité légale créée, dont le siège fait partie du périmètre chargé.
+    columns:
+      - name: siren
+        data_tests:
+          - not_null
+          - unique
+          - relationships:
+              arguments:
+                to: ref('dim_unite_legale')
+                field: siren
+      - name: cle_localisation
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_localisation')
+                field: cle_localisation
+      - name: cle_activite
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_activite')
+                field: cle_activite
+
+  - name: dim_activite
+    description: Une ligne par code APE d'unité légale, plus un membre inconnu.
+    columns:
+      - name: cle_activite
+        data_tests: [not_null, unique]
+
+  - name: dim_localisation
+    description: Une ligne par couple (commune, code postal) des sièges, plus un membre inconnu.
+    columns:
+      - name: cle_localisation
+        data_tests: [not_null, unique]
+
+  - name: dim_unite_legale
+    description: Une ligne par unité légale, avec le nom affiché qui respecte la diffusion partielle.
+    columns:
+      - name: siren
+        data_tests: [not_null, unique]

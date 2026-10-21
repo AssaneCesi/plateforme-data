@@ -1,0 +1,22 @@
+# Données : jamais dans le dépôt (volumineuses, et une partie est personnelle)
+data/*
+!data/.gitkeep
+exports/
+
+# dbt
+dbt/target/
+dbt/logs/
+dbt/dbt_packages/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# Great Expectations (contexte éphémère, rien à versionner)
+gx/uncommitted/
+
+# Power BI : versionne le .pbix seulement s'il ne contient pas de données personnelles
+*.pbix
+dbt/.user.yml

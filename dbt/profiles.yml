@@ -1,0 +1,8 @@
+plateforme:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      # Chemin fourni par pipeline.py ; valeur par défaut si tu lances dbt à la main depuis dbt/
+      path: "{{ env_var('OBS_ENTREPOT', '../data/entrepot.duckdb') }}"
+      threads: 4

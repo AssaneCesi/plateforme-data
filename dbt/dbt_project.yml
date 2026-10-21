@@ -1,0 +1,24 @@
+name: plateforme
+version: "1.0.0"
+config-version: 2
+profile: plateforme
+
+model-paths: ["models"]
+macro-paths: ["macros"]
+test-paths: ["tests"]
+snapshot-paths: ["snapshots"]
+target-path: target
+clean-targets: ["target", "dbt_packages"]
+
+models:
+  plateforme:
+    staging:
+      +materialized: view
+    quarantaine:
+      +materialized: table
+    marts:
+      +materialized: table
+
+data_tests:
+  plateforme:
+    +schema: controles     # lignes en échec conservées dans main_controles (store_failures)

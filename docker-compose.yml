@@ -1,0 +1,11 @@
+# Usage :
+#   docker compose build
+#   docker compose run --rm pipeline echantillon
+#   docker compose run --rm pipeline run
+# Les données et les exports restent sur ta machine grâce aux volumes.
+services:
+  pipeline:
+    build: .
+    volumes:
+      - ./data:/app/data
+      - ./exports:/app/exports

@@ -1,0 +1,147 @@
+# Data contract sous format ODCS
+
+
+apiVersion: v3.1.0
+kind: DataContract
+id: sirene-etablissements
+name: Établissements SIRENE (stock)
+version: 1.1.0
+status: active
+domain: entreprises
+dataProduct: plateforme-donnees-entreprises
+
+description:
+  purpose: >
+    Référentiel des établissements français. Contrat côté consommateur :
+    l'Insee ne le signe pas, il formalise nos attentes et pilote l'ingestion.
+  usage: Jointures siren/siret, analyses par activité et par territoire.
+  limitations: >
+    Un seul code APE par établissement. Pas de notion d'établissement principal.
+    Établissements en diffusion partielle (statut P) : certains champs masqués.
+
+schema:
+  - name: etablissements
+    physicalName: StockEtablissement
+    physicalType: table
+    logicalType: object
+    description: Un enregistrement par établissement (grain = siret).
+    properties:
+      - name: siret
+        physicalName: siret
+        logicalType: string
+        required: true
+        unique: true
+        primaryKey: true
+        description: Identifiant de l'établissement (SIREN + NIC)
+        quality:
+          - type: custom
+            engine: dbt
+            implementation: luhn_valide
+            description: Clé de Luhn valide
+      - name: siren
+        physicalName: siren
+        logicalType: string
+        required: true
+        description: Identifiant de l'unité légale
+      - name: nic
+        physicalName: nic
+        logicalType: string
+        required: false
+      - name: statut_diffusion
+        physicalName: statutDiffusionEtablissement
+        logicalType: string
+        required: true
+        description: O diffusible, P diffusion partielle
+        quality:
+          - type: library
+            metric: invalidValues
+            arguments: {validValues: ['O', 'P']}
+            mustBe: 0
+      - name: date_creation
+        physicalName: dateCreationEtablissement
+        logicalType: date
+        required: true
+      - name: date_dernier_traitement
+        physicalName: dateDernierTraitementEtablissement
+        logicalType: timestamp
+        required: true
+      - name: etablissement_siege
+        physicalName: etablissementSiege
+        logicalType: boolean
+        required: true
+      - name: code_postal
+        physicalName: codePostalEtablissement
+        logicalType: string
+        required: true
+        classification: restricted   # masqué si statut P
+      - name: libelle_commune
+        physicalName: libelleCommuneEtablissement
+        logicalType: string
+        required: false
+        classification: restricted
+      - name: code_commune
+        physicalName: codeCommuneEtablissement
+        logicalType: string
+        required: true
+      - name: date_debut
+        physicalName: dateDebut
+        logicalType: date
+        required: false
+      - name: etat_administratif
+        physicalName: etatAdministratifEtablissement
+        logicalType: string
+        required: true
+        description: A actif, F fermé
+        quality:
+          - type: library
+            metric: invalidValues
+            arguments: {validValues: ['A', 'F']}
+            mustBe: 0
+      - name: activite_principale
+        physicalName: activitePrincipaleEtablissement
+        logicalType: string
+        required: true
+        description: Code APE (NAF rév. 2)
+      - name: activite_principale_naf25
+        physicalName: activitePrincipaleNAF25Etablissement
+        logicalType: string
+        required: false
+        description: >
+          Code NAF 2025, informatif. Disparition annoncée par l'Insee
+          lors de la bascule de janvier 2027 (version majeure 2.0.0).
+    quality:
+      - type: library
+        metric: rowCount
+        mustBeGreaterThan: 30000000
+        description: Garde-fou contre un fichier tronqué
+
+slaProperties:
+  - property: frequency
+    value: 1
+    unit: m
+  - property: latency        # fraîcheur maximale
+    value: 40
+    unit: d
+    element: etablissements.date_dernier_traitement
+
+team:
+  - role: owner
+    username: "[responsable du référentiel entreprises]"
+  - role: data engineer
+    username: assane
+
+support:
+  - channel: issues
+    url: https://github.com/<toi>/plateforme-donnees-entreprises/issues
+
+servers:
+  - server: local
+    type: duckdb
+    database: entrepot.duckdb
+    schema: raw
+
+customProperties:
+  - property: consommateurs
+    value: [stg_etablissements, mart_etablissements, scorecard]
+  - property: preavisChangement
+    value: "30 jours avant toute suppression ou renommage de colonne requise"

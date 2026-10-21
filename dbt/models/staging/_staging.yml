@@ -1,0 +1,89 @@
+version: 2
+
+# Chaque test qui porte meta.regle_id alimente le score qualité (dq.resultats).
+# Les tests sans regle_id sont des garde-fous techniques : s'ils échouent,
+# c'est le pipeline qui est faux, pas la donnée.
+
+models:
+  - name: stg_etablissements
+    description: Établissements du dernier chargement, typés, conformes (R01, R03) et dédoublonnés (R02).
+    columns:
+      - name: siret
+        description: Identifiant de l'établissement (SIREN + NIC)
+        data_tests:
+          - not_null
+          - unique
+          - luhn_valide:
+              config:
+                severity: warn
+                store_failures: true
+                meta: {regle_id: R04}
+      - name: siren
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('stg_unites_legales')
+                field: siren
+              config:
+                severity: warn
+                store_failures: true
+                meta: {regle_id: R05}
+      - name: code_commune
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('stg_communes')
+                field: code_commune
+              config:
+                severity: warn
+                store_failures: true
+                where: "code_commune is not null"
+                meta: {regle_id: R06}
+      - name: code_ape
+        data_tests:
+          - respecte_regex:
+              arguments:
+                motif: '[0-9]{2}\.[0-9]{2}[A-Z]'
+              config:
+                severity: warn
+                store_failures: true
+                meta: {regle_id: R07}
+      - name: etat_administratif
+        data_tests:
+          - dans_liste:
+              arguments:
+                valeurs: ['A', 'F']
+              config:
+                severity: warn
+                store_failures: true
+                meta: {regle_id: R09}
+      - name: date_creation
+        data_tests:
+          - pas_dans_le_futur:
+              config:
+                severity: warn
+                store_failures: true
+                meta: {regle_id: R10}
+
+  - name: stg_unites_legales
+    description: Unités légales du dernier chargement, typées et dédoublonnées ; [ND] converti en NULL.
+    columns:
+      - name: siren
+        data_tests:
+          - not_null
+          - unique
+      - name: denomination
+        data_tests:
+          - not_null:
+              config:
+                severity: warn
+                store_failures: true
+                where: "not est_entrepreneur_individuel"
+                meta: {regle_id: R13}
+
+  - name: stg_communes
+    columns:
+      - name: code_commune
+        data_tests:
+          - not_null
+          - unique
