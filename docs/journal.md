@@ -118,4 +118,19 @@ C'est la matière première des posts LinkedIn et des réponses en entretien.
 - Appris :
     - MDM et RDM
 - Surpris :
-    - Attention pour jaro winkler avec jointure bien definir le perimetre(on va comparer ici deux entreprises au siren different mais sans argument suppplémentaire on compare chaque sirenx(longueur de la table - 1)). Il nous faut donc bloquer avec le CP.
+    - Attention pour jaro winkler avec jointure bien definir le perimetre(on va comparer ici deux entreprises au siren different mais sans argument suppplémentaire on compare chaque siren(longueur de la table - 1)). Il nous faut donc bloquer avec le CP.
+
+## [29/10/2026]:
+
+- Fait :
+    - Integration de airflow via WSL2 sur ma machine:
+        => on clone le projet dans ~/plateforme-donnees-entreprises et un crée un nouveau venv
+        => on installe airflow
+        => on crée un dossier dag avec un fichier python avec un dag minimal
+
+- Appris :
+    - ORCHESTRATION AVEC AIRFLOW:
+         => découper les étapes du pipeline (télécharger, valider le brut, transformer, profiler, charger). Les petites données (metadonnées) passent par Xcom et les grosses doivent etre stockées dans des fichiers parquet par exemple.Chaque tache recois un chemin
+         => attention conflits dépendances avec airflow et mes autres dépendances (un conteneur par tache idéalement)
+         =>  Dans airflow les imports son faits dans les taches pour pas ralentir le scheduler
+- Surpris :
