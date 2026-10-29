@@ -20,3 +20,6 @@ gx/uncommitted/
 # Power BI : versionne le .pbix seulement s'il ne contient pas de données personnelles
 *.pbix
 dbt/.user.yml
+# Configuration locale Airflow
+env.sh
+airflow_home/
