@@ -9,7 +9,7 @@ sources:
     tables:
       - name: etablissements
         description: Établissements SIRENE (contrat contracts/sirene_etablissements.yml)
-        columuns: 
+        columns: 
           - name: date_chargement
             config:
               loaded_at_field: date_chargement
