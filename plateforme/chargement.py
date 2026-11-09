@@ -6,7 +6,7 @@ Principes :
 - chaque chargement est daté ; recharger une date remplace ses lignes (idempotence).
 """
 import re
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 from .contrat import charger_contrat, colonne_source, liste_selection, verifier_schema
 from .entrepot import table_existe
@@ -107,3 +107,20 @@ def charger_communes(con, cfg, source):
                CAST("codesPostaux" AS VARCHAR) AS codes_postaux
         FROM read_parquet('{fichier}')""")
     return con.execute("SELECT count(*) FROM raw.communes").fetchone()[0]
+
+def purger_raw(con, date_reference, jours=90):
+    """Politique de conservation (Gv3) : raw garde les chargements des `jours` derniers jours.
+    Garde-fou : on ne supprime jamais le chargement le plus récent, même s'il est ancien
+    (pipeline arrêté plusieurs mois)."""
+    limite = date_reference - timedelta(days=jours)
+    supprimees = {}
+    for table in ("etablissements", "unites_legales"):
+        if not table_existe(con, "raw", table):
+            continue
+        dernier = con.execute(f"SELECT max(date_chargement) FROM raw.{table}").fetchone()[0]
+        condition = "date_chargement < ? AND date_chargement < ?"
+        n = con.execute(f"SELECT count(*) FROM raw.{table} WHERE {condition}", [limite, dernier]).fetchone()[0]
+        con.execute(f"DELETE FROM raw.{table} WHERE {condition}", [limite, dernier])
+        supprimees[table] = n
+    log.info("Conservation : chargements antérieurs au %s supprimés %s", limite, supprimees)
+    return supprimees

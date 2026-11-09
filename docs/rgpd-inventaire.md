@@ -14,7 +14,7 @@ demande de respecter le statut de diffusion le plus récent de chaque personne.
 
 Les données du repertoire sirene sont mises a jour chaque mois et il nous faut au minimum 2 chargements dans le raw, donc nous allon les garder 90j afin d'avoir une marge.
 
-## Qui accède à quoi
+## Qui accède à quoi (hypothèses)
 
 * raw: DE en lecture et ecriture.
 * marts: Analyste en lecture, DE en lecture et ecriture et Qaulity en lecture. 

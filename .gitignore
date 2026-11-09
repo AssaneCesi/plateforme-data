@@ -23,3 +23,7 @@ dbt/.user.yml
 # Configuration locale Airflow
 env.sh
 airflow_home/
+
+# Vscode config
+.vscode/
+

@@ -135,7 +135,16 @@ def plateforme_donnees_complete():
         jour = _date_du_run(get_current_context())
         return {"date": jour.isoformat(), "run_id": identifiant_du_jour(jour)}
 
-    # -- Tâche 2 : ingestion (§ 2, § 8c) ----------------------------------------------------
+    # -- Tâche 2 : telechargement (§ 2) ----------------------------------------------------
+    
+    @task(retries=2, retry_delay=timedelta(minutes=10), execution_timeout=timedelta(hours=1))
+    def telecharger():
+        from plateforme.config import charger_config
+        from plateforme.telechargement import mettre_a_jour_sources
+        return mettre_a_jour_sources(charger_config())
+
+    # -- Tâche 3 : ingestion (§ 3, § 8c) ----------------------------------------------------
+    
     @task
     def ingerer(ctx):
         """Charge le brut dans raw.* avec date_chargement = date du run.
@@ -150,7 +159,7 @@ def plateforme_donnees_complete():
         cfg = charger_config()
         etape_chargement(cfg, cfg["source"], date.fromisoformat(ctx["date"]), ctx["run_id"])
 
-    # -- Tâche 3 : contrôles Great Expectations, ÉCHEC BLOQUANT (§ 3) --------------------
+    # -- Tâche 4 : contrôles Great Expectations, ÉCHEC BLOQUANT (§ 4) --------------------
     @task
     def controles_entree(ctx):
         """Joue les règles GX sur le brut et écrit les résultats dans dq.resultats.
@@ -169,7 +178,7 @@ def plateforme_donnees_complete():
             ids = ", ".join(l["regle_id"] for l in bloquantes)
             raise AirflowFailException(f"Contrôles d'entrée : règle(s) bloquante(s) en échec ({ids}). dbt non lancé.")
 
-    # -- Tâche 4 : dbt build (§ 4) -----------------------------------------------------------
+    # -- Tâche 5 : dbt build (§ 5) -----------------------------------------------------------
     @task
     def dbt_build():
         """Lance `dbt build` et RENVOIE son code retour sans lever d'exception.
@@ -183,7 +192,7 @@ def plateforme_donnees_complete():
 
         return etape_dbt(charger_config())
 
-    # -- Tâche 5 : publication des résultats (§ 5) ------------------------------------------
+    # -- Tâche 6 : publication des résultats (§ 6) ------------------------------------------
     @task
     def publier_resultats(ctx):
         """Lit les artefacts dbt (run_results.json) -> dq.resultats, et exporte les CSV."""
@@ -192,7 +201,7 @@ def plateforme_donnees_complete():
 
         etape_sortie(charger_config(), ctx["run_id"], date.fromisoformat(ctx["date"]), afficher_rapport=False)
 
-    # -- Tâche 6 : verdict (dernière tâche = état final du run) -------------------------------
+    # -- Tâche 7 : verdict (dernière tâche = état final du run) -------------------------------
     @task
     def verdict(ctx, code_dbt):
         """Fait échouer le run si une règle bloquante est en échec OU si dbt a échoué.
@@ -212,12 +221,23 @@ def plateforme_donnees_complete():
         if raisons:
             raise AirflowFailException("Marts non publiés : " + " ; ".join(raisons) + ".")
 
+    # -- Tâche 8 : Supprimer les raw trop vieux -------------------------------
+    
+    @task
+    def purger(ctx):
+        from plateforme.config import charger_config
+        from plateforme.entrepot import connexion
+        from plateforme.chargement import purger_raw
+        from datetime import date
+        cfg = charger_config()
+        with connexion(cfg) as con:
+            return purger_raw(con, date.fromisoformat(ctx["date"]), cfg.get("conservation", {}).get("raw_jours", 90))
     # -- Chaînage ----------------------------------------------------------------------------
     # `>>` définit l'ordre. Appeler une tâche avec une autre en argument (ingerer(ctx)) crée
     # aussi une dépendance et transmet la valeur via XCom.
     ctx = preparer()
     code = dbt_build()
-    ingerer(ctx) >> controles_entree(ctx) >> code >> publier_resultats(ctx) >> verdict(ctx, code)
+    telecharger() >> ingerer(ctx) >> controles_entree(ctx) >> code >> publier_resultats(ctx) >> verdict(ctx, code) >> purger(ctx)
 
 
 plateforme_donnees_complete()

@@ -3,6 +3,9 @@ plateforme:
   outputs:
     dev:
       type: duckdb
-      # Chemin fourni par pipeline.py ; valeur par défaut si tu lances dbt à la main depuis dbt/
       path: "{{ env_var('OBS_ENTREPOT', '../data/entrepot.duckdb') }}"
-      threads: 4
+      threads: 1
+      settings:
+        memory_limit: "1500MB"
+        preserve_insertion_order: false
+        temp_directory: "../data/duckdb_tmp"

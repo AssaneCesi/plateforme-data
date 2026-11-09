@@ -2,10 +2,14 @@
 
 # echantillon : données synthétiques générées localement (aucun téléchargement)
 # reel        : fichiers stock SIRENE téléchargés avec `python pipeline.py telecharger`
-source: echantillon
+source: reel
 
 # Périmètre géographique chargé depuis les fichiers réels (codes département).
 departements: ["75", "92"]
+
+duckdb:
+  memory_limit: 1500MB    
+  threads: 1
 
 chemins:
   entrepot: data/entrepot.duckdb
@@ -24,3 +28,6 @@ sirene:
 
 geo_api: https://geo.api.gouv.fr
 api_recherche: https://recherche-entreprises.api.gouv.fr
+
+conservation:
+  raw_jours: 90

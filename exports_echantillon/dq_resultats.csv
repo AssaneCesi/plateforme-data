@@ -1,0 +1,135 @@
+run_id,regle_id,libelle,dimension,criticite,outil,objet,nb_controles,nb_echecs,taux_echec,seuil,statut,date_chargement,execute_le
+20261030_230207,R01,SIRET renseigné,Complétude,bloquante,Great Expectations,raw.etablissements,5807,2,0.00034441191665231615,0.001,ok,2026-10-30,2026-10-30 23:02:17.088949
+20261030_230207,R02,SIRET unique dans le chargement,Unicité,majeure,Great Expectations,raw.etablissements,5807,116,0.01997589116583434,0.0,echec,2026-10-30,2026-10-30 23:02:17.088968
+20261030_230207,R03,SIRET composé de 14 chiffres,Validité,bloquante,Great Expectations,raw.etablissements,5807,3,0.0005166178749784743,0.001,ok,2026-10-30,2026-10-30 23:02:17.088974
+20261030_230207,R08,Code postal à 5 chiffres,Validité,mineure,Great Expectations,raw.etablissements,5807,69,0.011882211124504908,0.01,echec,2026-10-30,2026-10-30 23:02:17.088979
+20261030_230207,R13,Dénomination renseignée pour les personnes morales,Complétude,majeure,dbt,stg_unites_legales,2615,13,0.00497131931166348,0.0,echec,2026-10-30,2026-10-30 23:03:50.75279
+20261030_230207,R09,État administratif A ou F,Validité,majeure,dbt,stg_etablissements,5744,11,0.001915041782729805,0.0,echec,2026-10-30,2026-10-30 23:03:50.835133
+20261030_230207,R04,"Clé de contrôle du SIRET (Luhn, exception La Poste)",Validité,majeure,dbt,stg_etablissements,5744,28,0.004874651810584958,0.0,echec,2026-10-30,2026-10-30 23:03:50.866452
+20261030_230207,R10,Date de création non future,Cohérence,majeure,dbt,stg_etablissements,5744,11,0.001915041782729805,0.0,echec,2026-10-30,2026-10-30 23:03:50.890898
+20261030_230207,R12,Un seul siège actif par unité légale active,Cohérence,mineure,dbt,stg_unites_legales,3405,15,0.004405286343612335,0.005,ok,2026-10-30,2026-10-30 23:03:50.930312
+20261030_230207,R06,Code commune présent dans le référentiel géographique,Validité,majeure,dbt,stg_etablissements,5744,22,0.00383008356545961,0.0,echec,2026-10-30,2026-10-30 23:03:50.976643
+20261030_230207,R05,Le SIREN de l'établissement existe dans les unités légales,Intégrité,majeure,dbt,stg_etablissements,5744,16,0.002785515320334262,0.0,echec,2026-10-30,2026-10-30 23:03:51.00342
+20261030_230207,R07,Code APE au format NAF (99.99X),Validité,majeure,dbt,stg_etablissements,5744,17,0.002959610027855153,0.0,echec,2026-10-30,2026-10-30 23:03:51.079693
+20261030_230207,R19,Diffusion partielle respectée : aucune donnée nominative exposée,Conformité,bloquante,dbt,mart_unites_legales,244,0,0.0,0.0,ok,2026-10-30,2026-10-30 23:03:51.085
+20261030_231130,R01,SIRET renseigné,Complétude,bloquante,Great Expectations,raw.etablissements,5807,2,0.00034441191665231615,0.001,ok,2026-10-30,2026-10-30 23:12:32.736606
+20261030_231130,R02,SIRET unique dans le chargement,Unicité,majeure,Great Expectations,raw.etablissements,5807,116,0.01997589116583434,0.0,echec,2026-10-30,2026-10-30 23:12:32.736624
+20261030_231130,R03,SIRET composé de 14 chiffres,Validité,bloquante,Great Expectations,raw.etablissements,5807,3,0.0005166178749784743,0.001,ok,2026-10-30,2026-10-30 23:12:32.736631
+20261030_231130,R08,Code postal à 5 chiffres,Validité,mineure,Great Expectations,raw.etablissements,5807,69,0.011882211124504908,0.01,echec,2026-10-30,2026-10-30 23:12:32.736637
+20261030_232415,R01,SIRET renseigné,Complétude,bloquante,Great Expectations,raw.etablissements,5807,2,0.00034441191665231615,0.001,ok,2026-10-30,2026-10-30 23:24:16.935125
+20261030_232415,R02,SIRET unique dans le chargement,Unicité,majeure,Great Expectations,raw.etablissements,5807,116,0.01997589116583434,0.0,echec,2026-10-30,2026-10-30 23:24:16.935138
+20261030_232415,R03,SIRET composé de 14 chiffres,Validité,bloquante,Great Expectations,raw.etablissements,5807,3,0.0005166178749784743,0.001,ok,2026-10-30,2026-10-30 23:24:16.935142
+20261030_232415,R08,Code postal à 5 chiffres,Validité,mineure,Great Expectations,raw.etablissements,5807,69,0.011882211124504908,0.01,echec,2026-10-30,2026-10-30 23:24:16.935145
+20261030_232415,R09,État administratif A ou F,Validité,majeure,dbt,stg_etablissements,5744,11,0.001915041782729805,0.0,echec,2026-10-30,2026-10-30 23:24:30.764722
+20261030_232415,R10,Date de création non future,Cohérence,majeure,dbt,stg_etablissements,5744,11,0.001915041782729805,0.0,echec,2026-10-30,2026-10-30 23:24:30.773427
+20261030_232415,R04,"Clé de contrôle du SIRET (Luhn, exception La Poste)",Validité,majeure,dbt,stg_etablissements,5744,28,0.004874651810584958,0.0,echec,2026-10-30,2026-10-30 23:24:30.781888
+20261030_232415,R07,Code APE au format NAF (99.99X),Validité,majeure,dbt,stg_etablissements,5744,17,0.002959610027855153,0.0,echec,2026-10-30,2026-10-30 23:24:30.791382
+20261030_232415,R06,Code commune présent dans le référentiel géographique,Validité,majeure,dbt,stg_etablissements,5744,22,0.00383008356545961,0.0,echec,2026-10-30,2026-10-30 23:24:30.803649
+20261030_232415,R13,Dénomination renseignée pour les personnes morales,Complétude,majeure,dbt,stg_unites_legales,2615,13,0.00497131931166348,0.0,echec,2026-10-30,2026-10-30 23:24:30.814021
+20261030_232415,R05,Le SIREN de l'établissement existe dans les unités légales,Intégrité,majeure,dbt,stg_etablissements,5744,16,0.002785515320334262,0.0,echec,2026-10-30,2026-10-30 23:24:30.823842
+20261030_232415,R12,Un seul siège actif par unité légale active,Cohérence,mineure,dbt,stg_unites_legales,3405,15,0.004405286343612335,0.005,ok,2026-10-30,2026-10-30 23:24:30.832058
+20261030_232415,R19,Diffusion partielle respectée : aucune donnée nominative exposée,Conformité,bloquante,dbt,mart_unites_legales,244,0,0.0,0.0,ok,2026-10-30,2026-10-30 23:24:30.835252
+20261030_234538,R01,SIRET renseigné,Complétude,bloquante,Great Expectations,raw.etablissements,5807,2,0.00034441191665231615,0.001,ok,2026-10-30,2026-10-30 23:45:45.833718
+20261030_234538,R02,SIRET unique dans le chargement,Unicité,majeure,Great Expectations,raw.etablissements,5807,116,0.01997589116583434,0.0,echec,2026-10-30,2026-10-30 23:45:45.833733
+20261030_234538,R03,SIRET composé de 14 chiffres,Validité,bloquante,Great Expectations,raw.etablissements,5807,3,0.0005166178749784743,0.001,ok,2026-10-30,2026-10-30 23:45:45.833738
+20261030_234538,R08,Code postal à 5 chiffres,Validité,mineure,Great Expectations,raw.etablissements,5807,69,0.011882211124504908,0.01,echec,2026-10-30,2026-10-30 23:45:45.833742
+20261030_234538,R09,État administratif A ou F,Validité,majeure,dbt,stg_etablissements,5744,11,0.001915041782729805,0.0,echec,2026-10-30,2026-10-30 23:45:57.367428
+20261030_234538,R10,Date de création non future,Cohérence,majeure,dbt,stg_etablissements,5744,11,0.001915041782729805,0.0,echec,2026-10-30,2026-10-30 23:45:57.376502
+20261030_234538,R04,"Clé de contrôle du SIRET (Luhn, exception La Poste)",Validité,majeure,dbt,stg_etablissements,5744,28,0.004874651810584958,0.0,echec,2026-10-30,2026-10-30 23:45:57.384419
+20261030_234538,R07,Code APE au format NAF (99.99X),Validité,majeure,dbt,stg_etablissements,5744,17,0.002959610027855153,0.0,echec,2026-10-30,2026-10-30 23:45:57.392249
+20261030_234538,R13,Dénomination renseignée pour les personnes morales,Complétude,majeure,dbt,stg_unites_legales,2615,13,0.00497131931166348,0.0,echec,2026-10-30,2026-10-30 23:45:57.400182
+20261030_234538,R12,Un seul siège actif par unité légale active,Cohérence,mineure,dbt,stg_unites_legales,3405,15,0.004405286343612335,0.005,ok,2026-10-30,2026-10-30 23:45:57.409453
+20261030_234538,R05,Le SIREN de l'établissement existe dans les unités légales,Intégrité,majeure,dbt,stg_etablissements,5744,16,0.002785515320334262,0.0,echec,2026-10-30,2026-10-30 23:45:57.417301
+20261030_234538,R06,Code commune présent dans le référentiel géographique,Validité,majeure,dbt,stg_etablissements,5744,22,0.00383008356545961,0.0,echec,2026-10-30,2026-10-30 23:45:57.426979
+20261030_234538,R19,Diffusion partielle respectée : aucune donnée nominative exposée,Conformité,bloquante,dbt,mart_unites_legales,244,0,0.0,0.0,ok,2026-10-30,2026-10-30 23:45:57.428724
+20261030_234744,R01,SIRET renseigné,Complétude,bloquante,Great Expectations,raw.etablissements,5807,2,0.00034441191665231615,0.001,ok,2026-10-30,2026-10-30 23:47:57.460119
+20261030_234744,R02,SIRET unique dans le chargement,Unicité,majeure,Great Expectations,raw.etablissements,5807,116,0.01997589116583434,0.0,echec,2026-10-30,2026-10-30 23:47:57.460156
+20261030_234744,R03,SIRET composé de 14 chiffres,Validité,bloquante,Great Expectations,raw.etablissements,5807,3,0.0005166178749784743,0.001,ok,2026-10-30,2026-10-30 23:47:57.460168
+20261030_234744,R08,Code postal à 5 chiffres,Validité,mineure,Great Expectations,raw.etablissements,5807,69,0.011882211124504908,0.01,echec,2026-10-30,2026-10-30 23:47:57.460178
+20261030_234744,R13,Dénomination renseignée pour les personnes morales,Complétude,majeure,dbt,stg_unites_legales,2615,13,0.00497131931166348,0.0,echec,2026-10-30,2026-10-30 23:48:24.596801
+20261030_234744,R09,État administratif A ou F,Validité,majeure,dbt,stg_etablissements,5744,11,0.001915041782729805,0.0,echec,2026-10-30,2026-10-30 23:48:24.610252
+20261030_234744,R04,"Clé de contrôle du SIRET (Luhn, exception La Poste)",Validité,majeure,dbt,stg_etablissements,5744,28,0.004874651810584958,0.0,echec,2026-10-30,2026-10-30 23:48:24.62085
+20261030_234744,R10,Date de création non future,Cohérence,majeure,dbt,stg_etablissements,5744,11,0.001915041782729805,0.0,echec,2026-10-30,2026-10-30 23:48:24.631599
+20261030_234744,R06,Code commune présent dans le référentiel géographique,Validité,majeure,dbt,stg_etablissements,5744,22,0.00383008356545961,0.0,echec,2026-10-30,2026-10-30 23:48:24.645529
+20261030_234744,R12,Un seul siège actif par unité légale active,Cohérence,mineure,dbt,stg_unites_legales,3405,15,0.004405286343612335,0.005,ok,2026-10-30,2026-10-30 23:48:24.657445
+20261030_234744,R05,Le SIREN de l'établissement existe dans les unités légales,Intégrité,majeure,dbt,stg_etablissements,5744,16,0.002785515320334262,0.0,echec,2026-10-30,2026-10-30 23:48:24.66748
+20261030_234744,R07,Code APE au format NAF (99.99X),Validité,majeure,dbt,stg_etablissements,5744,17,0.002959610027855153,0.0,echec,2026-10-30,2026-10-30 23:48:24.677961
+20261030_234744,R19,Diffusion partielle respectée : aucune donnée nominative exposée,Conformité,bloquante,dbt,mart_unites_legales,244,0,0.0,0.0,ok,2026-10-30,2026-10-30 23:48:24.680216
+20261101_153707,R01,SIRET renseigné,Complétude,bloquante,Great Expectations,raw.etablissements,5807,2,0.00034441191665231615,0.001,ok,2026-11-01,2026-11-01 15:37:15.258008
+20261101_153707,R02,SIRET unique dans le chargement,Unicité,majeure,Great Expectations,raw.etablissements,5807,116,0.01997589116583434,0.0,echec,2026-11-01,2026-11-01 15:37:15.25802
+20261101_153707,R03,SIRET composé de 14 chiffres,Validité,bloquante,Great Expectations,raw.etablissements,5807,3,0.0005166178749784743,0.001,ok,2026-11-01,2026-11-01 15:37:15.258025
+20261101_153707,R08,Code postal à 5 chiffres,Validité,mineure,Great Expectations,raw.etablissements,5807,69,0.011882211124504908,0.01,echec,2026-11-01,2026-11-01 15:37:15.258029
+20261101_153707,R09,État administratif A ou F,Validité,majeure,dbt,stg_etablissements,5744,11,0.001915041782729805,0.0,echec,2026-11-01,2026-11-01 15:37:34.677717
+20261101_153707,R10,Date de création non future,Cohérence,majeure,dbt,stg_etablissements,5744,11,0.001915041782729805,0.0,echec,2026-11-01,2026-11-01 15:37:34.688886
+20261101_153707,R04,"Clé de contrôle du SIRET (Luhn, exception La Poste)",Validité,majeure,dbt,stg_etablissements,5744,28,0.004874651810584958,0.0,echec,2026-11-01,2026-11-01 15:37:34.69821
+20261101_153707,R07,Code APE au format NAF (99.99X),Validité,majeure,dbt,stg_etablissements,5744,17,0.002959610027855153,0.0,echec,2026-11-01,2026-11-01 15:37:34.710039
+20261101_153707,R06,Code commune présent dans le référentiel géographique,Validité,majeure,dbt,stg_etablissements,5744,22,0.00383008356545961,0.0,echec,2026-11-01,2026-11-01 15:37:34.723609
+20261101_153707,R13,Dénomination renseignée pour les personnes morales,Complétude,majeure,dbt,stg_unites_legales,2615,13,0.00497131931166348,0.0,echec,2026-11-01,2026-11-01 15:37:34.731695
+20261101_153707,R05,Le SIREN de l'établissement existe dans les unités légales,Intégrité,majeure,dbt,stg_etablissements,5744,16,0.002785515320334262,0.0,echec,2026-11-01,2026-11-01 15:37:34.742144
+20261101_153707,R12,Un seul siège actif par unité légale active,Cohérence,mineure,dbt,stg_unites_legales,3405,15,0.004405286343612335,0.005,ok,2026-11-01,2026-11-01 15:37:34.751545
+20261101_153707,R19,Diffusion partielle respectée : aucune donnée nominative exposée,Conformité,bloquante,dbt,mart_unites_legales,244,0,0.0,0.0,ok,2026-11-01,2026-11-01 15:37:34.753464
+20261101_154005,R01,SIRET renseigné,Complétude,bloquante,Great Expectations,raw.etablissements,5807,2,0.00034441191665231615,0.001,ok,2026-11-01,2026-11-01 15:40:09.369949
+20261101_154005,R02,SIRET unique dans le chargement,Unicité,majeure,Great Expectations,raw.etablissements,5807,116,0.01997589116583434,0.0,echec,2026-11-01,2026-11-01 15:40:09.369963
+20261101_154005,R03,SIRET composé de 14 chiffres,Validité,bloquante,Great Expectations,raw.etablissements,5807,3,0.0005166178749784743,0.001,ok,2026-11-01,2026-11-01 15:40:09.369968
+20261101_154005,R08,Code postal à 5 chiffres,Validité,mineure,Great Expectations,raw.etablissements,5807,69,0.011882211124504908,0.01,echec,2026-11-01,2026-11-01 15:40:09.369972
+20261101_154005,R09,État administratif A ou F,Validité,majeure,dbt,stg_etablissements,5744,11,0.001915041782729805,0.0,echec,2026-11-01,2026-11-01 15:40:24.723813
+20261101_154005,R04,"Clé de contrôle du SIRET (Luhn, exception La Poste)",Validité,majeure,dbt,stg_etablissements,5744,28,0.004874651810584958,0.0,echec,2026-11-01,2026-11-01 15:40:24.740147
+20261101_154005,R10,Date de création non future,Cohérence,majeure,dbt,stg_etablissements,5744,11,0.001915041782729805,0.0,echec,2026-11-01,2026-11-01 15:40:24.757712
+20261101_154005,R06,Code commune présent dans le référentiel géographique,Validité,majeure,dbt,stg_etablissements,5744,22,0.00383008356545961,0.0,echec,2026-11-01,2026-11-01 15:40:24.777942
+20261101_154005,R07,Code APE au format NAF (99.99X),Validité,majeure,dbt,stg_etablissements,5744,17,0.002959610027855153,0.0,echec,2026-11-01,2026-11-01 15:40:24.794501
+20261101_154005,R13,Dénomination renseignée pour les personnes morales,Complétude,majeure,dbt,stg_unites_legales,2615,13,0.00497131931166348,0.0,echec,2026-11-01,2026-11-01 15:40:24.811618
+20261101_154005,R12,Un seul siège actif par unité légale active,Cohérence,mineure,dbt,stg_unites_legales,3405,15,0.004405286343612335,0.005,ok,2026-11-01,2026-11-01 15:40:24.823913
+20261101_154005,R05,Le SIREN de l'établissement existe dans les unités légales,Intégrité,majeure,dbt,stg_etablissements,5744,16,0.002785515320334262,0.0,echec,2026-11-01,2026-11-01 15:40:24.837327
+20261101_154005,R19,Diffusion partielle respectée : aucune donnée nominative exposée,Conformité,bloquante,dbt,mart_unites_legales,244,0,0.0,0.0,ok,2026-11-01,2026-11-01 15:40:24.839369
+20261103_planifie,R01,SIRET renseigné,Complétude,bloquante,Great Expectations,raw.etablissements,5807,2,0.00034441191665231615,0.001,ok,2026-11-03,2026-11-03 19:14:57.228176
+20261103_planifie,R02,SIRET unique dans le chargement,Unicité,majeure,Great Expectations,raw.etablissements,5807,116,0.01997589116583434,0.0,echec,2026-11-03,2026-11-03 19:14:57.228204
+20261103_planifie,R03,SIRET composé de 14 chiffres,Validité,bloquante,Great Expectations,raw.etablissements,5807,3,0.0005166178749784743,0.001,ok,2026-11-03,2026-11-03 19:14:57.228214
+20261103_planifie,R08,Code postal à 5 chiffres,Validité,mineure,Great Expectations,raw.etablissements,5807,69,0.011882211124504908,0.01,echec,2026-11-03,2026-11-03 19:14:57.228223
+20261103_planifie,R09,État administratif A ou F,Validité,majeure,dbt,stg_etablissements,5744,11,0.001915041782729805,0.0,echec,2026-11-03,2026-11-03 19:16:39.725892
+20261103_planifie,R04,"Clé de contrôle du SIRET (Luhn, exception La Poste)",Validité,majeure,dbt,stg_etablissements,5744,28,0.004874651810584958,0.0,echec,2026-11-03,2026-11-03 19:16:39.750747
+20261103_planifie,R10,Date de création non future,Cohérence,majeure,dbt,stg_etablissements,5744,11,0.001915041782729805,0.0,echec,2026-11-03,2026-11-03 19:16:39.774501
+20261103_planifie,R06,Code commune présent dans le référentiel géographique,Validité,majeure,dbt,stg_etablissements,5744,22,0.00383008356545961,0.0,echec,2026-11-03,2026-11-03 19:16:39.814272
+20261103_planifie,R07,Code APE au format NAF (99.99X),Validité,majeure,dbt,stg_etablissements,5744,17,0.002959610027855153,0.0,echec,2026-11-03,2026-11-03 19:16:39.858685
+20261103_planifie,R13,Dénomination renseignée pour les personnes morales,Complétude,majeure,dbt,stg_unites_legales,2615,13,0.00497131931166348,0.0,echec,2026-11-03,2026-11-03 19:16:39.879577
+20261103_planifie,R05,Le SIREN de l'établissement existe dans les unités légales,Intégrité,majeure,dbt,stg_etablissements,5744,16,0.002785515320334262,0.0,echec,2026-11-03,2026-11-03 19:16:39.965723
+20261103_planifie,R12,Un seul siège actif par unité légale active,Cohérence,mineure,dbt,stg_unites_legales,3405,15,0.004405286343612335,0.005,ok,2026-11-03,2026-11-03 19:16:39.994595
+20261103_planifie,R19,Diffusion partielle respectée : aucune donnée nominative exposée,Conformité,bloquante,dbt,mart_unites_legales,244,0,0.0,0.0,ok,2026-11-03,2026-11-03 19:16:40.006002
+20261106_planifie,R01,SIRET renseigné,Complétude,bloquante,Great Expectations,raw.etablissements,5807,2,0.00034441191665231615,0.001,ok,2026-11-06,2026-11-06 18:39:33.775386
+20261106_planifie,R02,SIRET unique dans le chargement,Unicité,majeure,Great Expectations,raw.etablissements,5807,116,0.01997589116583434,0.0,echec,2026-11-06,2026-11-06 18:39:33.775419
+20261106_planifie,R03,SIRET composé de 14 chiffres,Validité,bloquante,Great Expectations,raw.etablissements,5807,3,0.0005166178749784743,0.001,ok,2026-11-06,2026-11-06 18:39:33.775428
+20261106_planifie,R08,Code postal à 5 chiffres,Validité,mineure,Great Expectations,raw.etablissements,5807,69,0.011882211124504908,0.01,echec,2026-11-06,2026-11-06 18:39:33.775435
+20261106_planifie,R13,Dénomination renseignée pour les personnes morales,Complétude,majeure,dbt,stg_unites_legales,2615,13,0.00497131931166348,0.0,echec,2026-11-06,2026-11-06 18:42:51.438633
+20261106_planifie,R09,État administratif A ou F,Validité,majeure,dbt,stg_etablissements,5744,11,0.001915041782729805,0.0,echec,2026-11-06,2026-11-06 18:42:51.469277
+20261106_planifie,R04,"Clé de contrôle du SIRET (Luhn, exception La Poste)",Validité,majeure,dbt,stg_etablissements,5744,28,0.004874651810584958,0.0,echec,2026-11-06,2026-11-06 18:42:51.489572
+20261106_planifie,R10,Date de création non future,Cohérence,majeure,dbt,stg_etablissements,5744,11,0.001915041782729805,0.0,echec,2026-11-06,2026-11-06 18:42:51.506814
+20261106_planifie,R12,Un seul siège actif par unité légale active,Cohérence,mineure,dbt,stg_unites_legales,3405,15,0.004405286343612335,0.005,ok,2026-11-06,2026-11-06 18:42:51.522108
+20261106_planifie,R06,Code commune présent dans le référentiel géographique,Validité,majeure,dbt,stg_etablissements,5744,22,0.00383008356545961,0.0,echec,2026-11-06,2026-11-06 18:42:51.539514
+20261106_planifie,R05,Le SIREN de l'établissement existe dans les unités légales,Intégrité,majeure,dbt,stg_etablissements,5744,16,0.002785515320334262,0.0,echec,2026-11-06,2026-11-06 18:42:51.552505
+20261106_planifie,R07,Code APE au format NAF (99.99X),Validité,majeure,dbt,stg_etablissements,5744,17,0.002959610027855153,0.0,echec,2026-11-06,2026-11-06 18:42:51.565854
+20261106_planifie,R19,Diffusion partielle respectée : aucune donnée nominative exposée,Conformité,bloquante,dbt,mart_unites_legales,244,0,0.0,0.0,ok,2026-11-06,2026-11-06 18:42:51.569737
+20261107_planifie,R01,SIRET renseigné,Complétude,bloquante,Great Expectations,raw.etablissements,5807,2,0.00034441191665231615,0.001,ok,2026-11-07,2026-11-07 11:00:51.719036
+20261107_planifie,R02,SIRET unique dans le chargement,Unicité,majeure,Great Expectations,raw.etablissements,5807,116,0.01997589116583434,0.0,echec,2026-11-07,2026-11-07 11:00:51.71905
+20261107_planifie,R03,SIRET composé de 14 chiffres,Validité,bloquante,Great Expectations,raw.etablissements,5807,3,0.0005166178749784743,0.001,ok,2026-11-07,2026-11-07 11:00:51.719055
+20261107_planifie,R08,Code postal à 5 chiffres,Validité,mineure,Great Expectations,raw.etablissements,5807,69,0.011882211124504908,0.01,echec,2026-11-07,2026-11-07 11:00:51.719058
+20261107_planifie,R09,État administratif A ou F,Validité,majeure,dbt,stg_etablissements,5744,11,0.001915041782729805,0.0,echec,2026-11-07,2026-11-07 11:01:23.403823
+20261107_planifie,R04,"Clé de contrôle du SIRET (Luhn, exception La Poste)",Validité,majeure,dbt,stg_etablissements,5744,28,0.004874651810584958,0.0,echec,2026-11-07,2026-11-07 11:01:23.412709
+20261107_planifie,R13,Dénomination renseignée pour les personnes morales,Complétude,majeure,dbt,stg_unites_legales,2615,13,0.00497131931166348,0.0,echec,2026-11-07,2026-11-07 11:01:23.424641
+20261107_planifie,R10,Date de création non future,Cohérence,majeure,dbt,stg_etablissements,5744,11,0.001915041782729805,0.0,echec,2026-11-07,2026-11-07 11:01:23.432449
+20261107_planifie,R12,Un seul siège actif par unité légale active,Cohérence,mineure,dbt,stg_unites_legales,3405,15,0.004405286343612335,0.005,ok,2026-11-07,2026-11-07 11:01:23.439348
+20261107_planifie,R06,Code commune présent dans le référentiel géographique,Validité,majeure,dbt,stg_etablissements,5744,22,0.00383008356545961,0.0,echec,2026-11-07,2026-11-07 11:01:23.449455
+20261107_planifie,R05,Le SIREN de l'établissement existe dans les unités légales,Intégrité,majeure,dbt,stg_etablissements,5744,16,0.002785515320334262,0.0,echec,2026-11-07,2026-11-07 11:01:23.457128
+20261107_planifie,R07,Code APE au format NAF (99.99X),Validité,majeure,dbt,stg_etablissements,5744,17,0.002959610027855153,0.0,echec,2026-11-07,2026-11-07 11:01:23.465439
+20261107_planifie,R19,Diffusion partielle respectée : aucune donnée nominative exposée,Conformité,bloquante,dbt,mart_unites_legales,244,0,0.0,0.0,ok,2026-11-07,2026-11-07 11:01:23.468126
+20261109_planifie,R01,SIRET renseigné,Complétude,bloquante,Great Expectations,raw.etablissements,5807,2,0.00034441191665231615,0.001,ok,2026-11-09,2026-11-09 11:01:07.135449
+20261109_planifie,R02,SIRET unique dans le chargement,Unicité,majeure,Great Expectations,raw.etablissements,5807,116,0.01997589116583434,0.0,echec,2026-11-09,2026-11-09 11:01:07.13546
+20261109_planifie,R03,SIRET composé de 14 chiffres,Validité,bloquante,Great Expectations,raw.etablissements,5807,3,0.0005166178749784743,0.001,ok,2026-11-09,2026-11-09 11:01:07.135464
+20261109_planifie,R08,Code postal à 5 chiffres,Validité,mineure,Great Expectations,raw.etablissements,5807,69,0.011882211124504908,0.01,echec,2026-11-09,2026-11-09 11:01:07.135467
+20261109_planifie,R13,Dénomination renseignée pour les personnes morales,Complétude,majeure,dbt,stg_unites_legales,2615,13,0.00497131931166348,0.0,echec,2026-11-09,2026-11-09 11:01:30.087287
+20261109_planifie,R09,État administratif A ou F,Validité,majeure,dbt,stg_etablissements,5744,11,0.001915041782729805,0.0,echec,2026-11-09,2026-11-09 11:01:30.098033
+20261109_planifie,R04,"Clé de contrôle du SIRET (Luhn, exception La Poste)",Validité,majeure,dbt,stg_etablissements,5744,28,0.004874651810584958,0.0,echec,2026-11-09,2026-11-09 11:01:30.107809
+20261109_planifie,R10,Date de création non future,Cohérence,majeure,dbt,stg_etablissements,5744,11,0.001915041782729805,0.0,echec,2026-11-09,2026-11-09 11:01:30.117916
+20261109_planifie,R12,Un seul siège actif par unité légale active,Cohérence,mineure,dbt,stg_unites_legales,3405,15,0.004405286343612335,0.005,ok,2026-11-09,2026-11-09 11:01:30.127835
+20261109_planifie,R06,Code commune présent dans le référentiel géographique,Validité,majeure,dbt,stg_etablissements,5744,22,0.00383008356545961,0.0,echec,2026-11-09,2026-11-09 11:01:30.141029
+20261109_planifie,R05,Le SIREN de l'établissement existe dans les unités légales,Intégrité,majeure,dbt,stg_etablissements,5744,16,0.002785515320334262,0.0,echec,2026-11-09,2026-11-09 11:01:30.150935
+20261109_planifie,R07,Code APE au format NAF (99.99X),Validité,majeure,dbt,stg_etablissements,5744,17,0.002959610027855153,0.0,echec,2026-11-09,2026-11-09 11:01:30.158689
+20261109_planifie,R19,Diffusion partielle respectée : aucune donnée nominative exposée,Conformité,bloquante,dbt,mart_unites_legales,244,0,0.0,0.0,ok,2026-11-09,2026-11-09 11:01:30.16059

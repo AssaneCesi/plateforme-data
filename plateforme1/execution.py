@@ -9,10 +9,11 @@
 """
 from datetime import date, datetime
 
-from . import chargement, collecte, controles_gx, rapport, regles as catalogue_regles
-from .entrepot import connexion
-from .journal import journal
-from .transformation import DOSSIER_DBT, executer_dbt
+from . import chargement, rapport
+from plateforme import collecte, controles_gx, regles as catalogue_regles
+from plateforme.entrepot import connexion
+from plateforme.journal import journal
+from plateforme.transformation import DOSSIER_DBT, executer_dbt
 
 log = journal("pipeline")
 

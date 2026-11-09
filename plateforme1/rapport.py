@@ -1,5 +1,5 @@
 """Score qualité par dimension, règles en échec, et exports pour le scorecard."""
-from .journal import journal
+from plateforme.journal import journal
 
 log = journal("rapport")
 

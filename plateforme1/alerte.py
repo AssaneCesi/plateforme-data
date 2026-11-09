@@ -9,8 +9,8 @@ import os
 
 import httpx
 
-from .entrepot import connexion
-from .journal import journal
+from plateforme.entrepot import connexion
+from plateforme.journal import journal
 from .rapport import regles_bloquantes_en_echec
 
 log = journal("alerte")

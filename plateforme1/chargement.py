@@ -8,9 +8,9 @@ Principes :
 import re
 from datetime import date, datetime
 
-from .contrat import charger_contrat, colonne_source, liste_selection, verifier_schema
-from .entrepot import table_existe
-from .journal import journal
+from plateforme.contrat import charger_contrat, colonne_source, liste_selection, verifier_schema
+from plateforme.entrepot import table_existe
+from plateforme.journal import journal
 
 log = journal("chargement")
 MOTIF_DEPARTEMENT = re.compile(r"^(\d{2,3}|2[AB])$")

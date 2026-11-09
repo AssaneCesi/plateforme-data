@@ -1,0 +1,15 @@
+run_id,objet,date_chargement,source,nb_lignes,charge_le
+20261030_234744,etablissements,2026-10-30,/home/assane_thiaw/plateforme-donnees-entreprises/data/echantillon/StockEtablissement.parquet,5807,2026-10-30 23:47:56.592371
+20261030_234744,unites_legales,2026-10-30,/home/assane_thiaw/plateforme-donnees-entreprises/data/echantillon/StockUniteLegale.parquet,4001,2026-10-30 23:47:56.682755
+20261101_154005,etablissements,2026-11-01,/home/assane_thiaw/plateforme-donnees-entreprises/data/echantillon/StockEtablissement.parquet,5807,2026-11-01 15:40:09.052136
+20261101_154005,unites_legales,2026-11-01,/home/assane_thiaw/plateforme-donnees-entreprises/data/echantillon/StockUniteLegale.parquet,4001,2026-11-01 15:40:09.070468
+20261103_planifie,etablissements,2026-11-03,/home/assane_thiaw/plateforme-donnees-entreprises/data/echantillon/StockEtablissement.parquet,5807,2026-11-03 19:14:45.050519
+20261103_planifie,unites_legales,2026-11-03,/home/assane_thiaw/plateforme-donnees-entreprises/data/echantillon/StockUniteLegale.parquet,4001,2026-11-03 19:14:45.063737
+20261106_planifie,etablissements,2026-11-06,/home/assane_thiaw/plateforme-donnees-entreprises/data/echantillon/StockEtablissement.parquet,5807,2026-11-06 18:39:12.254429
+20261106_planifie,unites_legales,2026-11-06,/home/assane_thiaw/plateforme-donnees-entreprises/data/echantillon/StockUniteLegale.parquet,4001,2026-11-06 18:39:12.262421
+20261107_planifie,etablissements,2026-11-07,/home/assane_thiaw/plateforme-donnees-entreprises/data/echantillon/StockEtablissement.parquet,5807,2026-11-07 11:00:40.904176
+20261107_planifie,unites_legales,2026-11-07,/home/assane_thiaw/plateforme-donnees-entreprises/data/echantillon/StockUniteLegale.parquet,4001,2026-11-07 11:00:40.910963
+20261108_planifie,etablissements,2026-11-08,/home/assane_thiaw/plateforme-donnees-entreprises/data/echantillon/StockEtablissement.parquet,5807,2026-11-08 11:00:39.754485
+20261108_planifie,unites_legales,2026-11-08,/home/assane_thiaw/plateforme-donnees-entreprises/data/echantillon/StockUniteLegale.parquet,4001,2026-11-08 11:00:39.765679
+20261109_planifie,etablissements,2026-11-09,/home/assane_thiaw/plateforme-donnees-entreprises/data/echantillon/StockEtablissement.parquet,5807,2026-11-09 11:01:00.954596
+20261109_planifie,unites_legales,2026-11-09,/home/assane_thiaw/plateforme-donnees-entreprises/data/echantillon/StockUniteLegale.parquet,4001,2026-11-09 11:01:01.004512

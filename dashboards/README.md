@@ -13,5 +13,3 @@ Pour avoir une tendance dès le début : `python pipeline.py historique --jours 
 2. Page 1 : score global du dernier run, score par dimension, courbe du score global dans le temps.
 3. Page 2 : règles triées par nombre d'échecs, avec criticité et seuil.
 4. Règle d'or : le scorecard se lit en dix secondes, et chaque chiffre se décompose.
-
-Dépose ici les captures (`scorecard.png`) utilisées dans le README.

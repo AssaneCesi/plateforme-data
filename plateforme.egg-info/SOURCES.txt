@@ -23,6 +23,11 @@ plateforme.egg-info/PKG-INFO
 plateforme.egg-info/SOURCES.txt
 plateforme.egg-info/dependency_links.txt
 plateforme.egg-info/top_level.txt
+plateforme1/__init__.py
+plateforme1/alerte.py
+plateforme1/chargement.py
+plateforme1/execution.py
+plateforme1/rapport.py
 tests/test_api_recherche.py
 tests/test_contrat.py
 tests/test_luhn.py

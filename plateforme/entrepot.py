@@ -18,7 +18,13 @@ DDL = [
 def connexion(cfg, lecture_seule=False):
     chemin = cfg["chemins"]["entrepot"]
     chemin.parent.mkdir(parents=True, exist_ok=True)
-    con = duckdb.connect(str(chemin), read_only=lecture_seule)
+    reglages = cfg.get("duckdb", {})
+    con = duckdb.connect(str(chemin), read_only=lecture_seule, config={
+        "memory_limit": reglages.get("memory_limit", "3GB"),
+        "threads": reglages.get("threads", 2),
+        "preserve_insertion_order": False,          # gros INSERT : beaucoup moins de mémoire
+        "temp_directory": str(chemin.parent / "duckdb_tmp"),
+    })
     if not lecture_seule:
         for requete in DDL:
             con.execute(requete)

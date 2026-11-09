@@ -127,10 +127,14 @@ C'est la matière première des posts LinkedIn et des réponses en entretien.
         => on clone le projet dans ~/plateforme-donnees-entreprises et un crée un nouveau venv
         => on installe airflow
         => on crée un dossier dag avec un fichier python avec un dag minimal
+        => schedulé à la frequence de MAJ de l'INSEE(le fichier stock est mis à jour tous les premier du mois et l'API chaque jour a 10h. Il serait donc intéressent ici de faire une charge incrémentale chaque jor depuis l'API et chaque 1er du mois faire un gros load),
+        => 
 
 - Appris :
     - ORCHESTRATION AVEC AIRFLOW:
          => découper les étapes du pipeline (télécharger, valider le brut, transformer, profiler, charger). Les petites données (metadonnées) passent par Xcom et les grosses doivent etre stockées dans des fichiers parquet par exemple.Chaque tache recois un chemin
          => attention conflits dépendances avec airflow et mes autres dépendances (un conteneur par tache idéalement)
          =>  Dans airflow les imports son faits dans les taches pour pas ralentir le scheduler
+         => limiter l'acces a DuckDB a 1 à la fois.
+         => le dag reprends les fonctions de la plateforme et les orchestre.
 - Surpris :
