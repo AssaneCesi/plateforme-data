@@ -23,7 +23,7 @@ select
     etat_administratif,
     try_cast(date_creation as date)                 as date_creation,
     try_cast(date_dernier_traitement as timestamp)  as date_dernier_traitement,
-    nullif(trim(denomination), '')                  as denomination,
+    nullif(nullif(trim(denomination), ''),'[ND]')   as denomination,
     nullif(nullif(trim(nom), ''), '[ND]')           as nom,
     nullif(nullif(trim(prenom1), ''), '[ND]')       as prenom1,
     categorie_juridique,

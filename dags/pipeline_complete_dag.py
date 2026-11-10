@@ -145,7 +145,7 @@ def plateforme_donnees_complete():
 
     # -- Tâche 3 : ingestion (§ 3, § 8c) ----------------------------------------------------
     
-    @task
+    @task(execution_timeout=timedelta(hours=1))
     def ingerer(ctx):
         """Charge le brut dans raw.* avec date_chargement = date du run.
 
@@ -179,7 +179,7 @@ def plateforme_donnees_complete():
             raise AirflowFailException(f"Contrôles d'entrée : règle(s) bloquante(s) en échec ({ids}). dbt non lancé.")
 
     # -- Tâche 5 : dbt build (§ 5) -----------------------------------------------------------
-    @task
+    @task(execution_timeout=timedelta(hours=1))
     def dbt_build():
         """Lance `dbt build` et RENVOIE son code retour sans lever d'exception.
 

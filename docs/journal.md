@@ -138,3 +138,16 @@ C'est la matière première des posts LinkedIn et des réponses en entretien.
          => limiter l'acces a DuckDB a 1 à la fois.
          => le dag reprends les fonctions de la plateforme et les orchestre.
 - Surpris :
+
+## [10/11/2026]:
+- Fait : 
+    - Lancement du pipeline de bout en bout avec airflow:
+    => Integration des données réelles via task de telechargement controlé
+    
+
+- Appris :
+
+- Surpris :
+    => Erreur r19 bloquante. creation d'une temp (CREATE TEMP VIEW echecs_r19 AS ) view sur duckdb avec la requete de de r19 afin d'avoir une vue sur les données concernée(elles nont pas été stocké car RGPD).
+    Après inspection il ne s'agissait pas d'une fuite de données personnelles seulement les données affichaient '[ND]' qui est le marqueur que l'INSEE met à la place du nom lorsque la personne est opposée à la diffusion de ce dernier. *** le vrai probleme *** est que mon pipeline pense que ce marqueur est un nom au lieu de le passer en NULL(Le test R19 vérifie que nom_affiche est nul pour tout statut P, et '[ND]' n’est pas nul, donc il échoue). C’est un problème de standardisation, pas de confidentialité.
+    => solution: dans stg_unites_legales passer nullif(trim(denomination), '')as denomination en nullif(nullif(trim(denomination), ''),'[ND]') 
