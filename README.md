@@ -1,4 +1,4 @@
-# Plateforme de données d'entreprises, qualité intégrée
+# Plateforme de données d'entreprises
 
 Pipeline de bout en bout sur la base SIRENE de l'Insee (entreprises et établissements
 français) : ingestion pilotée par des data contracts, chargements idempotents, transformations
