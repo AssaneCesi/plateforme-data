@@ -1,6 +1,6 @@
 /* Dédoublonnage : etablissements_raw contient plusieurs versions 
 d'un même SIRET (un par chargement). 
-Ne garde que la plus récente selon date_dernier_traitement. */
+Ne garder que la plus récente selon date_dernier_traitement. */
 
 
 SELECT *

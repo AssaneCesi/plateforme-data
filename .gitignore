@@ -26,3 +26,10 @@ airflow_home/
 # Vscode config
 .vscode/
 
+# Airflow
+airflow/
+
+# Docs (exercices)
+
+docs/experience_inpi.md
+docs/rgpd-inventaire.md

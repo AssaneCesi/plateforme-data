@@ -1,5 +1,5 @@
 -- Lignes du dernier chargement écartées à l'entrée (R01, R03).
--- Conservées pour analyse et pour être signalées au producteur : on ne corrige pas en silence.
+-- Conservées pour analyse et pour être signalées au producteur.
 
 select
     *,

@@ -9,7 +9,7 @@
 
 -- R19 (bloquante) : aucune donnée nominative exposée pour un entrepreneur individuel
 -- en diffusion partielle, et aucun marqueur [ND] ne doit atteindre les marts.
--- Si ce test échoue, dbt ne publie pas la suite : c'est voulu.
+-- Si ce test échoue, dbt ne publie pas la suite.
 
 select siren, statut_diffusion, nom_affiche
 from {{ ref('mart_unites_legales') }}

@@ -1,8 +1,8 @@
 /*Un SIREN valide a 9 chiffres et respecte l'algorithme de Luhn : 
 en partant de la droite, on double un chiffre sur deux, on retire
  9 si le double dépasse 9, et la somme totale doit être un multiple
-  de 10.
- Écris la requête qui renvoie chaque SIREN et un booléen luhn_ok.*/
+  de 10.*/
+  
 EXPLAIN ANALYZE
 WITH chiffres AS (
   SELECT u.siren,

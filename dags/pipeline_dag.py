@@ -1,5 +1,4 @@
 """DAG de la plateforme : mêmes étapes que `python pipeline.py run`, une tâche par étape.
-
 Le traitement reste dans le package `plateforme` (aucun import Airflow là-bas).
 Ici on ne fait que l'orchestrer. Les tâches échangent des valeurs simples (run_id, date,
 code dbt) : les données restent dans l'entrepôt DuckDB.

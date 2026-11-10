@@ -1,27 +1,6 @@
-"""DAG de la plateforme de données — version commentée.
+"""DAG de la plateforme de données."""
 
-Où trouver chaque exigence dans ce fichier
-------------------------------------------
-1. Quotidien                        -> `schedule=` dans @dag (§ 3)
-2. Ingestion                        -> tâche `ingerer`
-3. Contrôles GX à l'entrée,
-   échec BLOQUANT                   -> tâche `controles_entree` (AirflowFailException) + le
-                                       chaînage : dbt_build ne démarre que si elle réussit
-4. dbt build                        -> tâche `dbt_build`
-5. Publication dans dq.resultats    -> tâche `publier_resultats`
-6. Alerte si règle bloquante        -> `_alerter` (callback) branché dans default_args
-7. Deux retries avec délai          -> `retries` / `retry_delay` dans default_args
-8. Ingestion idempotente            -> trois morceaux qui marchent ensemble :
-                                       a. `_date_du_run` : la date vient du RUN, pas de l'horloge
-                                       b. `preparer`     : run_id déterministe (AAAAMMJJ_planifie)
-                                       c. plateforme/chargement.py::_ecrire : DELETE + INSERT
-                                          dans une transaction (tout ou rien)
 
-Flux :  preparer -> ingerer -> controles_entree -> dbt_build -> publier_resultats -> verdict
-
-Le traitement reste dans le package `plateforme` : ce fichier ne fait qu'ORCHESTRER
-(ordre, relances, alertes). C'est ce qui permet de garder `python pipeline.py run`.
-"""
 from datetime import date, datetime, timedelta
 from zoneinfo import ZoneInfo
 

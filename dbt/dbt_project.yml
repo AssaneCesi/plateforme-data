@@ -21,4 +21,4 @@ models:
 
 data_tests:
   plateforme:
-    +schema: controles     # lignes en échec conservées dans main_controles (store_failures)
+    +schema: controles     # lignes en échec(si echec pas grave, sinon quarantine) conservées dans main_controles (store_failures)
