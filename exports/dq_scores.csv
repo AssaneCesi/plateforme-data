@@ -1,0 +1,8 @@
+run_id,date_chargement,dimension,score_pct
+20261110_planifie,2026-11-10,Cohérence,97.89
+20261110_planifie,2026-11-10,Complétude,99.95
+20261110_planifie,2026-11-10,Conformité,100.0
+20261110_planifie,2026-11-10,GLOBAL,98.85
+20261110_planifie,2026-11-10,Intégrité,100.0
+20261110_planifie,2026-11-10,Unicité,100.0
+20261110_planifie,2026-11-10,Validité,95.27

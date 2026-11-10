@@ -1,0 +1,14 @@
+run_id,regle_id,libelle,dimension,criticite,outil,objet,nb_controles,nb_echecs,taux_echec,seuil,statut,date_chargement,execute_le
+20261110_planifie,R01,SIRET renseigné,Complétude,bloquante,Great Expectations,raw.etablissements,5108892,0,0.0,0.001,ok,2026-11-10,2026-11-10 17:38:36.329776
+20261110_planifie,R02,SIRET unique dans le chargement,Unicité,majeure,Great Expectations,raw.etablissements,5108892,0,0.0,0.0,ok,2026-11-10,2026-11-10 17:38:36.329794
+20261110_planifie,R03,SIRET composé de 14 chiffres,Validité,bloquante,Great Expectations,raw.etablissements,5108892,0,0.0,0.001,ok,2026-11-10,2026-11-10 17:38:36.329802
+20261110_planifie,R08,Code postal à 5 chiffres,Validité,mineure,Great Expectations,raw.etablissements,5108892,663871,0.12994422273949027,0.01,echec,2026-11-10,2026-11-10 17:38:36.329807
+20261110_planifie,R09,État administratif A ou F,Validité,majeure,dbt,stg_etablissements,5108892,0,0.0,0.0,ok,2026-11-10,2026-11-10 18:22:04.53141
+20261110_planifie,R04,"Clé de contrôle du SIRET (Luhn, exception La Poste)",Validité,majeure,dbt,stg_etablissements,5108892,42,8.22096063099396e-06,0.0,echec,2026-11-10,2026-11-10 18:22:08.737768
+20261110_planifie,R10,Date de création non future,Cohérence,majeure,dbt,stg_etablissements,5108892,643,0.00012585899251735993,0.0,echec,2026-11-10,2026-11-10 18:22:12.816562
+20261110_planifie,R06,Code commune présent dans le référentiel géographique,Validité,majeure,dbt,stg_etablissements,5108892,0,0.0,0.0,ok,2026-11-10,2026-11-10 18:22:18.726165
+20261110_planifie,R07,Code APE au format NAF (99.99X),Validité,majeure,dbt,stg_etablissements,5108892,1117738,0.21878285937537925,0.0,echec,2026-11-10,2026-11-10 18:22:23.191855
+20261110_planifie,R13,Dénomination renseignée pour les personnes morales,Complétude,majeure,dbt,stg_unites_legales,2014415,4480,0.00222397073095663,0.0,echec,2026-11-10,2026-11-10 18:22:28.216781
+20261110_planifie,R12,Un seul siège actif par unité légale active,Cohérence,mineure,dbt,stg_unites_legales,2232377,261715,0.11723602241019326,0.005,echec,2026-11-10,2026-11-10 18:22:31.662521
+20261110_planifie,R05,Le SIREN de l'établissement existe dans les unités légales,Intégrité,majeure,dbt,stg_etablissements,5108892,0,0.0,0.0,ok,2026-11-10,2026-11-10 18:22:35.931631
+20261110_planifie,R19,Diffusion partielle respectée : aucune donnée nominative exposée,Conformité,bloquante,dbt,mart_unites_legales,427721,0,0.0,0.0,ok,2026-11-10,2026-11-10 18:22:36.002221

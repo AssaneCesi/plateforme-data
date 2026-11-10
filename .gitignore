@@ -1,7 +1,6 @@
 # Données : jamais dans le dépôt (volumineuses, et une partie est personnelle)
 data/*
 !data/.gitkeep
-exports/
 
 # dbt
 dbt/target/
