@@ -1,40 +1,41 @@
 # Plateforme de données d'entreprises, qualité intégrée
 
-
 Pipeline de bout en bout sur la base SIRENE de l'Insee (entreprises et établissements
 français) : ingestion pilotée par des data contracts, chargements idempotents, transformations
-et tests dbt, quarantaine, score qualité historisé à chaque run, scorecard et gouvernance.
-Orchestré chaque jour par Airflow.
+et tests dbt et GX, modèle en étoile, quarantaine, score qualité historisé à chaque run, scorecard et
+gouvernance. Orchestré chaque jour par Airflow, sur les données réelles.
 
-> **Statut v1 : données de test.** Le scorecard ci-dessous est calculé sur l'**échantillon de
-> test** du projet (données synthétiques au format SIRENE, environ 5 800 établissements, avec des
-> anomalies injectées volontairement). Le DAG Airflow tourne aujourd'hui sur cet échantillon.
-> Le passage du DAG aux fichiers stock réels est la prochaine étape (voir [Limites et suite](#limites-et-suite)).
-> Les trois constats chiffrés viennent, eux, d'un run exploratoire sur les données réelles.
+> **Statut v1 : données réelles.** Depuis le 10/11/2026, le DAG Airflow charge chaque jour les
+> fichiers stock SIRENE sur Paris et les Hauts-de-Seine (5,1 millions d'établissements et
+> 3,8 millions d'unités légales). Un
+> échantillon synthétique avec anomalies injectées reste disponible pour les tests, dans un
+> entrepôt séparé.
 
 ## Résumé
 
 - **Le problème :** SIRENE est publique, volumineuse (environ 3 Go par chargement) et imparfaite :
   doublons, codes invalides, sièges introuvables, données personnelles à masquer.
-- **Ce que fait le projet :** il charge, contrôle, isole les lignes en défaut, calcule un score
-  par dimension de qualité et **bloque la publication** si une règle bloquante dépasse son seuil.
-- **Resultat :** un scorecard régénéré à chaque run, 13 règles évaluées, un historique par jour.
+- **Ce que fait le projet :** il télécharge, charge, contrôle, isole les lignes en défaut, calcule
+  un score par dimension de qualité et **bloque la publication** si une règle bloquante dépasse
+  son seuil.
+- **Résultat :** un scorecard régénéré à chaque run, 13 règles évaluées, un historique par jour,
+  et un premier.
+- **Bonus :** incident réel détecté et bloqué automatiquement (voir [Incident réel](#incident-réel--données-nominatives-en-diffusion-partielle)).
 
 ![Scorecard qualité](dashboards/scorecard.png)
 
-*Scorecard du 09/11/2026, généré par `python dashboards/scorecard.py` à partir des exports du
-pipeline. Données de test.*
+*Scorecard du 10/11/2026, généré par `python dashboards/scorecard.py` à partir
+des exports du pipeline. Données réelles, Paris et Hauts-de-Seine.*
 
 ## Application des principes de qualité et gouvernance à l'ingénierie de données
 
 | Côté data engineering | Côté qualité et gouvernance |
 |---|---|
-| Ingestion pilotée par contrat (ODCS), arrêt sur rupture de schéma | Catalogue de 13 règles versionné, avec seuil et criticité |
+| Ingestion pilotée par contrat (ODCS), arrêt sur rupture de schéma | Catalogue de règles versionné, avec seuil et criticité |
 | Chargement daté et idempotent : rejouer une date ne crée pas de doublons | Contrôles d'entrée (Great Expectations) et tests dbt dans une seule table de résultats |
-| Couches raw, staging, marts ; règle de survie pour les doublons | Quarantaine plutôt que correction silencieuse |
-| DAG Airflow quotidien, Docker, tests et CI | Score par dimension pondéré par la criticité, historisé à chaque run |
-| DuckDB et dbt, parquet en entrée | Glossaire métier, inventaire RGPD, masquage des personnes en diffusion partielle |
-
+| Couches raw, staging, intermediate, marts ; modèle en étoile ; table courante incrémentale | Quarantaine plutôt que correction silencieuse |
+| DAG Airflow quotidien : téléchargement conditionnel, relances, alerte, purge | Score par dimension pondéré par la criticité, historisé à chaque run |
+| DuckDB et dbt, parquet en entrée, mémoire maîtrisée | Glossaire métier, inventaire RGPD, conservation de 90 jours, masquage des personnes en diffusion partielle |
 
 ## Architecture
 
@@ -46,50 +47,81 @@ flowchart LR
   R --> G[Contrôles d'entrée GX]
   R --> Q[(quarantaine)]
   R --> S[dbt staging : typage, survie]
-  S --> M[marts]
+  S --> I[intermediate : table courante, doublons flous]
+  I --> M[marts : modèle en étoile]
   S --> T[tests dbt]
   G --> D[(dq.resultats)]
   T --> D
   D --> P[Rapport, exports CSV, scorecard]
 ```
 
-1. **Chargement** : le contrat de chaque source (`contracts/`) décide des colonnes lues et
-   arrête tout si une colonne requise manque. Recharger une date remplace ses lignes.
-2. **Contrôles d'entrée** : Great Expectations sur le brut.
-3. **Transformation et tests** : dbt type les colonnes, applique la règle de survie, isole les
-   SIRET absents ou mal formés en quarantaine et construit les marts.
-4. **Collecte** : résultats GX et dbt réunis dans `dq.resultats`, une ligne par règle et par run.
-5. **Rapport** : score par dimension, exports CSV (`exports/`) et scorecard. Le code de sortie
-   vaut 1 si une règle bloquante dépasse son seuil : dans Airflow, c'est ce qui arrête la publication.
+Le DAG `pipeline_plateforme_donnees_complete` enchaîne :
 
-## Ce que montre le scorecard (données de test)
+1. **Téléchargement** : les fichiers ne sont retéléchargés que si data.gouv.fr publie une version
+   plus récente.
+2. **Chargement** : le contrat de chaque source (`contracts/`) décide des colonnes lues et
+   arrête tout si une colonne requise manque. La date des données vient du run Airflow, pas de
+   l'horloge => rejouer une date remplace ses lignes.
+3. **Contrôles d'entrée** : Great Expectations sur le brut. Une règle bloquante en échec arrête
+   le DAG avant dbt.
+4. **Transformation et tests** : dbt type les colonnes, applique la règle de survie, isole les
+   SIRET absents ou mal formés en quarantaine, maintient la table courante des établissements
+   en incrémental et construit le modèle en étoile (faits des créations, dimensions activité,
+   localisation et unité légale).
+5. **Publication et verdict** : résultats GX et dbt réunis dans `dq.resultats`, exports CSV,
+   scorecard. Si une règle bloquante dépasse son seuil ou si dbt échoue, le run échoue, les marts
+   ne sont pas publiés et une alerte part.
+6. **Purge** : les chargements bruts de plus de 90 jours sont supprimés (politique de
+   conservation documentée dans l'inventaire RGPD), seulement si le run a réussi.
 
-| Indicateur | Valeur au 09/11/2026 |
+## Ce que montre le scorecard 
+
+| Indicateur | Valeur au 10/11/2026 |
 |---|---|
-| Score global | 99,50 % |
+| Volume chargé | 5 108 892 établissements, 3 767 118 unités légales |
+| Score global | 98,85 % |
 | Règles bloquantes en échec | 0 sur 3 : publication autorisée |
-| Règles au-dessus de leur seuil | 9 sur 13 |
-| Dimension la plus faible | Unicité, 98,00 % (116 SIRET en double sur 5 807) |
-| Historique | 11 runs sur 6 jours, score stable |
+| Règles au-dessus de leur seuil | 6 sur 13 |
+| Dimension la plus faible | Validité, 95,27 % |
 
-**Ce qu'il faut en retenir :** un score de 99,5 % cohabite avec 9 règles sur 13 en alerte.
-Un score agrégé seul rassure à tort ; c'est pourquoi le scorecard affiche toujours le détail
-par règle à côté. Sur l'échantillon, chaque anomalie injectée est bien détectée par la règle
-prévue, et les trois règles bloquantes (SIRET renseigné, SIRET à 14 chiffres, aucune donnée
-nominative exposée) restent sous leur seuil.
+**Ce qu'il faut en retenir :** la dimension Validité est tirée vers le bas par deux règles :
+le format du code APE (R07, 1 117 738 établissements, 21,9 %) et le code postal à 5 chiffres
+(R08, 663 871 établissements, 13,0 %). Des taux aussi élevés sur une source officielle
+signalent d'abord une règle à revoir avant une donnée fausse : leur analyse est en cours
+(voir [Limites et suite](#limites-et-suite)).
+
+## Incident réel : données nominatives en diffusion partielle
+
+Au premier run sur les données réelles, la règle bloquante R19 (« aucune donnée nominative
+exposée pour une personne en diffusion partielle ») a échoué : **4 480 unités légales sur
+427 721 (1,05 %)** affichaient un nom dans le mart, pour un seuil de 0 %.
+
+- **Détection et blocage :** le DAG a refusé de publier les marts et a déclenché l'alerte.
+- **Analyse :** 100 % des lignes en échec portaient la valeur `[ND]`, le marqueur par lequel
+  l'Insee masque une donnée non diffusible. Il n'y avait donc pas de fuite : le nom était déjà
+  masqué à la source. Mais ce marqueur n'était pas converti en NULL pour la dénomination, alors
+  qu'il l'était pour le nom et le prénom.
+- **Correction :** la dénomination est nettoyée en staging comme les autres champs d'identité.
+  R19 repasse sous son seuil.
+- **Leçon à en tirer:** l'échantillon de test ne contenait ce marqueur que dans les colonnes attendues.
+  Seules les données réelles ont révélé le cas, et c'est la règle bloquante qui l'a attrapé
+  avant publication.
+- **Effet de bord :** au run suivant, la règle R13 (« dénomination renseignée pour les
+  personnes morales ») compte exactement 4 480 dénominations manquantes. Ce sont les mêmes
+  unités : leur dénomination, désormais NULL, est masquée à la source, pas absente. Une donnée
+  masquée n'est pas une donnée manquante => R13 doit donc exclure les unités en diffusion partielle à l'avenir.
 
 ## Ce que les données m'ont appris
 
-Run exploratoire sur les fichiers stock réels (Paris et Hauts-de-Seine, octobre 2026 :
-3 746 269 établissements, environ 17 minutes, score global 98,68 %).
+Sur les fichiers stock réels (Paris et Hauts-de-Seine) :
 
 1. **12 % des sièges sont introuvables (environ 458 000).** Charger un périmètre de
    départements coupe le lien entre une entreprise et son siège situé ailleurs. Un filtre
    de périmètre casse l'intégrité référentielle : la règle « un seul siège par unité légale »
    ne contrôle donc que les unités dont le siège est dans le périmètre.
-2. **Le code APE 70.10Z est environ 8 fois plus fréquent chez les sièges (28 000 contre 3 500).**
+2. **Le code APE 70.10Z(activité officielle des sièges sociaux) est environ 8 fois plus fréquent chez les sièges (28 000 contre 3 500).**
    C'est l'effet de la domiciliation : le siège n'est pas le lieu de l'activité. Décision
-   documentée dans le [glossaire](docs/glossaire.md) : on localise une entreprise par la commune
+   documentée dans le [glossaire](docs/glossaire.md) => on localise donc une entreprise par la commune
    de son siège, mais on compte les établissements pour analyser un territoire.
 3. **Un index divise par 3 le temps d'une recherche ponctuelle (0,034 s à 0,010 s), et ne
    change rien aux agrégations.** DuckDB est un moteur en colonnes : une requête qui lit toute
@@ -100,18 +132,12 @@ Run exploratoire sur les fichiers stock réels (Paris et Hauts-de-Seine, octobre
 
 | Choix | Pourquoi |
 |---|---|
-| DuckDB plutôt que PostgreSQL | Lit le parquet directement, rapide en analytique, pas besoin de serveur. Pas d'écritures concurrentes ; un seul processus écrit à la fois |
-| dbt pour les transformations et les tests | SQL versionné, tests déclaratifs, lignage possible |
+| DuckDB plutôt que PostgreSQL | Lit le parquet directement, rapide en analytique, pas besoin de serveur. Pas d'écritures concurrentes : un seul run Airflow à la fois (`max_active_runs=1`) |
+| dbt pour les transformations et les tests | SQL versionné, tests déclaratifs, lignage |
 | Great Expectations à l'entrée, dbt après | Bloquer tôt sur le brut, contrôler la logique métier après typage |
-| Quarantaine plutôt que correction | Afin de pouvoir mesurer les défauts et les signaler |
+| Quarantaine plutôt que correction | Mesurer les défauts et pouvoir les signaler au producteur |
 | Score pondéré par criticité | Une règle bloquante pèse 3 fois plus qu'une règle mineure |
-
-## Incident simulé
-
-À venir. La commande `python pipeline.py historique --jours 7 --incident 5` simule un fichier
-tronqué au jour 5 (40 % de lignes en moins). La règle de volume R17 (« volume dans ±3
-écarts-types des 7 chargements précédents ») doit le détecter et bloquer la publication ;
-elle est en cours d'implémentation. Le compte rendu ira dans [`docs/incidents/`](docs/incidents/).
+| Entrepôts séparés pour l'échantillon et le réel | L'historique qualité et la future règle de volume ne mélangent jamais données de test et données réelles |
 
 ## Lancer le projet
 
@@ -130,19 +156,22 @@ Données réelles :
 ```bash
 python pipeline.py telecharger       # fichiers stock parquet (environ 2,8 Go)
 python pipeline.py run --source reel # périmètre : départements de config.yml
-python dashboards/scorecard.py --mention ""   # retire le bandeau « données de test »
+python dashboards/scorecard.py --mention ""
 ```
 
-Orchestration : un DAG Airflow lance le pipeline chaque jour (voir [`airflow/`](airflow/)).
+Orchestration : le DAG `dags/pipeline_complete_dag.py` lance le pipeline chaque jour.
 Docker : `docker compose build` puis `docker compose run --rm pipeline run`.
 
 ## Limites et suite
 
-- **Passer le DAG sur les données réelles** (`--source reel`). Les fichiers stock SIRENE
-  sont publiés une fois par mois : le DAG doit détecter un nouveau fichier plutôt que
-  recharger chaque jour le même.
-- **Règle de volume R17** et premier incident documenté.
-- **Modèle en étoile et chargement incrémental** (dbt).
+- **Ne recharger que les nouveaux fichiers.** Le téléchargement est déjà conditionnel, mais
+  l'ingestion recharge chaque jour le même fichier mensuel : la sauter quand rien n'a changé.
+- **Masquage fondé sur le statut de diffusion** dans les marts, quelle que soit la façon dont
+  la source marque les données ; R13 adaptée pour ne plus compter les dénominations masquées.
+- **Analyser R07 et R08** (code APE et code postal) : distinguer les vraies erreurs des cas
+  légitimes (anciennes nomenclatures, établissements sans adresse en France…) avant de
+  corriger la règle ou de remonter les anomalies.
+- **Règle de volume R17** et procédure de rejeu documentée.
 - **Passage à l'échelle** : tout le territoire en PySpark.
 - **Catalogue et lignage** : OpenMetadata, à partir du glossaire et du catalogue des règles.
 
@@ -150,6 +179,6 @@ Docker : `docker compose build` puis `docker compose run --rm pipeline run`.
 
 Les données SIRENE sont publiées par l'Insee sous Licence Ouverte 2.0. Elles contiennent des
 données personnelles (entrepreneurs individuels) : le dossier `data/` n'est jamais versionné,
-les personnes en diffusion partielle sont masquées dans les marts (règle bloquante R19) et
-l'inventaire des traitements est dans [`docs/rgpd-inventaire.md`](docs/rgpd-inventaire.md).
-
+les personnes en diffusion partielle sont masquées dans les marts (règle bloquante R19), les
+chargements bruts sont conservés 90 jours, et l'inventaire des traitements est dans
+[`docs/rgpd-inventaire.md`](docs/rgpd-inventaire.md).
