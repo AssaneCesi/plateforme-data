@@ -1,3 +1,5 @@
 run_id,objet,date_chargement,source,nb_lignes,charge_le
 20261110_planifie,etablissements,2026-11-10,/home/assane_thiaw/plateforme-donnees-entreprises/data/sirene/StockEtablissement.parquet,5108892,2026-11-10 17:37:47.769964
 20261110_planifie,unites_legales,2026-11-10,/home/assane_thiaw/plateforme-donnees-entreprises/data/sirene/StockUniteLegale.parquet,3767118,2026-11-10 17:37:47.785307
+20261111_planifie,etablissements,2026-11-11,/home/assane_thiaw/plateforme-donnees-entreprises/data/sirene/StockEtablissement.parquet,5108892,2026-11-11 11:04:53.980766
+20261111_planifie,unites_legales,2026-11-11,/home/assane_thiaw/plateforme-donnees-entreprises/data/sirene/StockUniteLegale.parquet,3767118,2026-11-11 11:04:53.991217
