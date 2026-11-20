@@ -7,4 +7,4 @@ name = "plateforme"
 version = "0.1.0"
 
 [tool.setuptools]
-packages = ["plateforme", "plateforme1"]
+packages = ["plateforme"]

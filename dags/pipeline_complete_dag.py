@@ -50,9 +50,9 @@ def _alerter(contexte):
     TELEGRAM_CHAT_ID sont définies dans l'environnement ; voir plateforme/alerte.py).
     """
     try:
-        from plateforme1.alerte import alerter
+        from plateforme.alerte import alerter
         from plateforme.config import charger_config
-        from plateforme1.execution import identifiant_du_jour
+        from plateforme.execution import identifiant_du_jour
 
         jour = _date_du_run(contexte)
         ti = contexte["task_instance"]
@@ -109,7 +109,7 @@ def plateforme_donnees_complete():
         (regles.enregistrer supprime par run_id + règle avant d'insérer).
         Le dictionnaire passe d'une tâche à l'autre par XCom : réservé aux petites valeurs.
         """
-        from plateforme1.execution import identifiant_du_jour
+        from plateforme.execution import identifiant_du_jour
 
         jour = _date_du_run(get_current_context())
         return {"date": jour.isoformat(), "run_id": identifiant_du_jour(jour)}
@@ -133,7 +133,7 @@ def plateforme_donnees_complete():
         anciennes lignes au lieu de rester vide. Les autres dates ne sont jamais touchées.
         """
         from plateforme.config import charger_config
-        from plateforme1.execution import etape_chargement
+        from plateforme.execution import etape_chargement
 
         cfg = charger_config()
         etape_chargement(cfg, cfg["source"], date.fromisoformat(ctx["date"]), ctx["run_id"])
@@ -150,7 +150,7 @@ def plateforme_donnees_complete():
         Une erreur technique (exception ordinaire) serait, elle, relancée 2 fois.
         """
         from plateforme.config import charger_config
-        from plateforme1.execution import etape_controles_entree
+        from plateforme.execution import etape_controles_entree
 
         bloquantes = etape_controles_entree(charger_config(), ctx["run_id"], date.fromisoformat(ctx["date"]))
         if bloquantes:
@@ -167,7 +167,7 @@ def plateforme_donnees_complete():
         le run. Le code (un entier) passe par XCom.
         """
         from plateforme.config import charger_config
-        from plateforme1.execution import etape_dbt
+        from plateforme.execution import etape_dbt
 
         return etape_dbt(charger_config())
 
@@ -176,7 +176,7 @@ def plateforme_donnees_complete():
     def publier_resultats(ctx):
         """Lit les artefacts dbt (run_results.json) -> dq.resultats, et exporte les CSV."""
         from plateforme.config import charger_config
-        from plateforme1.execution import etape_sortie
+        from plateforme.execution import etape_sortie
 
         etape_sortie(charger_config(), ctx["run_id"], date.fromisoformat(ctx["date"]), afficher_rapport=False)
 
@@ -188,7 +188,7 @@ def plateforme_donnees_complete():
         Pourquoi une tâche dédiée : l'état d'un run dépend de ses tâches FEUILLES.
         Sans elle, un run avec dbt en erreur pourrait s'afficher « success ».
         """
-        from plateforme1.alerte import regles_bloquantes
+        from plateforme.alerte import regles_bloquantes
         from plateforme.config import charger_config
 
         bloquantes = regles_bloquantes(charger_config(), ctx["run_id"])

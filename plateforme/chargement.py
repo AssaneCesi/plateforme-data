@@ -30,8 +30,15 @@ def _ecrire(con, table, requete, date_chargement, params=()):
         if nom not in existantes:                       # le contrat a gagné une colonne
             log.info("Évolution de schéma : ajout de raw.%s.%s", table, nom)
             con.execute(f"ALTER TABLE raw.{table} ADD COLUMN {nom} {type_}")
-    con.execute(f"DELETE FROM raw.{table} WHERE date_chargement = ?", [date_chargement])
-    con.execute(f"INSERT INTO raw.{table} BY NAME SELECT * FROM _lot")
+    # Tout ou rien : si l'INSERT échoue, le DELETE est annulé et la date garde ses anciennes lignes.
+    con.execute("BEGIN TRANSACTION")
+    try:
+        con.execute(f"DELETE FROM raw.{table} WHERE date_chargement = ?", [date_chargement])
+        con.execute(f"INSERT INTO raw.{table} BY NAME SELECT * FROM _lot")
+        con.execute("COMMIT")
+    except Exception:
+        con.execute("ROLLBACK")
+        raise
     n = con.execute("SELECT count(*) FROM _lot").fetchone()[0]
     con.execute("DROP TABLE _lot")
     return n
@@ -107,6 +114,7 @@ def charger_communes(con, cfg, source):
                CAST("codesPostaux" AS VARCHAR) AS codes_postaux
         FROM read_parquet('{fichier}')""")
     return con.execute("SELECT count(*) FROM raw.communes").fetchone()[0]
+
 
 def purger_raw(con, date_reference, jours=90):
     """Politique de conservation (Gv3) : raw garde les chargements des `jours` derniers jours.
