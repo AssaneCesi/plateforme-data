@@ -68,3 +68,14 @@ def blocage(con, run_id):
     """Vrai si une règle bloquante dépasse son seuil ou n'a pas pu s'exécuter."""
     return con.execute("""SELECT count(*) FROM dq.resultats
         WHERE run_id = ? AND criticite = 'bloquante' AND statut <> 'ok'""", [run_id]).fetchone()[0] > 0
+
+
+def regles_bloquantes_en_echec(con, run_id):
+    """Règles bloquantes au-dessus du seuil ou en erreur pour ce run (pour les alertes).
+
+    Renvoie des tuples (regle_id, libelle, nb_echecs, nb_controles, taux_echec, seuil, statut).
+    """
+    return con.execute("""SELECT regle_id, libelle, nb_echecs, nb_controles, taux_echec, seuil, statut
+        FROM dq.resultats
+        WHERE run_id = ? AND criticite = 'bloquante' AND statut <> 'ok'
+        ORDER BY regle_id""", [run_id]).fetchall()
